@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed" namespace="Orm\Zed\Payment\Persistence" package="src.Orm.Zed.Payment.Persistence" xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd">
+
+    <table name="spy_payment_method" identifierQuoting="true">
+        <column name="label_name" type="VARCHAR" size="255" required="false"/>
+        <column name="group_name" type="VARCHAR" size="255" required="false"/>
+        <column name="checkout_order_token_url" type="VARCHAR" size="1000" required="false"/>
+        <column name="checkout_redirect_url" type="VARCHAR" size="1000" required="false"/>
+        <column name="is_deleted" type="BOOLEAN" default="false" required="true"/>
+        <column name="is_external" type="BOOLEAN" default="false" required="true"/>
+    </table>
+
+</database>
