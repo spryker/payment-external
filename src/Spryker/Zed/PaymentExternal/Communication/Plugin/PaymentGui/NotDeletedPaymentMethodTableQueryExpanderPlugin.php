@@ -13,6 +13,7 @@ use Spryker\Zed\PaymentGuiExtension\Dependency\Plugin\PaymentMethodTableQueryExp
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
+ * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
 class NotDeletedPaymentMethodTableQueryExpanderPlugin extends AbstractPlugin implements PaymentMethodTableQueryExpanderPluginInterface
 {

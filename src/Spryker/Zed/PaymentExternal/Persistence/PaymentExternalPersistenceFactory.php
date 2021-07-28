@@ -13,6 +13,7 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface getEntityManager()
+ * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
 class PaymentExternalPersistenceFactory extends AbstractPersistenceFactory
 {

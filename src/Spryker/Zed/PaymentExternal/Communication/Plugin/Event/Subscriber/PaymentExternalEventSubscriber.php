@@ -16,6 +16,7 @@ use Spryker\Zed\PaymentExternal\Dependency\PaymentExternalEvents;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
+ * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
 class PaymentExternalEventSubscriber extends AbstractPlugin implements EventSubscriberInterface
 {

@@ -14,6 +14,9 @@ use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacade
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceBridge;
 
+/**
+ * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
+ */
 class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
 {
     public const FACADE_PAYMENT = 'FACADE_PAYMENT';
