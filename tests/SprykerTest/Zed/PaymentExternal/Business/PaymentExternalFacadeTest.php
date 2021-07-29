@@ -45,13 +45,18 @@ class PaymentExternalFacadeTest extends Unit
         ]);
 
         // Act
-        $paymentMethodTransfer = $this->tester->getFacade()
+        $createdPaymentMethodTransfer = $this->tester->getFacade()
             ->addPaymentMethod($paymentMethodTransfer);
 
         // Assert
-        $this->assertNotNull($paymentMethodTransfer->getIdPaymentMethod());
-        $this->assertNotNull($paymentMethodTransfer->getIdPaymentProvider());
-        $this->assertFalse($paymentMethodTransfer->getIsDeleted());
+        $this->assertNotNull($createdPaymentMethodTransfer->getIdPaymentMethod());
+        $this->assertNotNull($createdPaymentMethodTransfer->getIdPaymentProvider());
+        $this->assertFalse($createdPaymentMethodTransfer->getIsDeleted());
+
+        $this->assertSame($paymentMethodTransfer->getLabelName(), $createdPaymentMethodTransfer->getLabelName());
+        $this->assertSame($paymentMethodTransfer->getGroupName(), $createdPaymentMethodTransfer->getGroupName());
+        $this->assertSame($paymentMethodTransfer->getCheckoutOrderTokenUrl(), $createdPaymentMethodTransfer->getCheckoutOrderTokenUrl());
+        $this->assertSame($paymentMethodTransfer->getCheckoutRedirectUrl(), $createdPaymentMethodTransfer->getCheckoutRedirectUrl());
     }
 
     /**
