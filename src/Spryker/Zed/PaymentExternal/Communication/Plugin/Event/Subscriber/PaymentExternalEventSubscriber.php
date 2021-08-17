@@ -27,8 +27,8 @@ class PaymentExternalEventSubscriber extends AbstractPlugin implements EventSubs
      */
     public function getSubscribedEvents(EventCollectionInterface $eventCollection): EventCollectionInterface
     {
-        $eventCollection->addListenerQueued(PaymentExternalEvents::PBC_PAYMENT_METHOD_ADDED, new PaymentExternalMethodAddedEventListener());
-        $eventCollection->addListenerQueued(PaymentExternalEvents::PBC_PAYMENT_METHOD_DELETED, new PaymentExternalMethodDeletedEventListener());
+        $eventCollection->addListener(PaymentExternalEvents::PBC_PAYMENT_METHOD_ADDED, new PaymentExternalMethodAddedEventListener());
+        $eventCollection->addListener(PaymentExternalEvents::PBC_PAYMENT_METHOD_DELETED, new PaymentExternalMethodDeletedEventListener());
 
         return $eventCollection;
     }
