@@ -10,8 +10,8 @@ namespace Spryker\Zed\PaymentExternal;
 use Orm\Zed\Payment\Persistence\SpyPaymentMethodQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeBridge;
-use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceBridge;
 
 /**
@@ -19,9 +19,11 @@ use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServ
  */
 class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
 {
+    public const CLIENT_PAYMENT_EXTERNAL = 'CLIENT_PAYMENT_EXTERNAL';
+
+    public const FACADE_LOCALE = 'FACADE_LOCALE';
     public const FACADE_PAYMENT = 'FACADE_PAYMENT';
 
-    public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
     public const SERVICE_UTIL_TEXT = 'SERVICE_UTIL_TEXT';
 
     public const PROPEL_QUERY_PAYMENT_METHOD = 'PROPEL_QUERY_PAYMENT_METHOD';
@@ -33,8 +35,9 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      */
     public function provideBusinessLayerDependencies(Container $container): Container
     {
+        $container = $this->addPaymentExternalClient($container);
+        $container = $this->addLocaleFacade($container);
         $container = $this->addPaymentFacade($container);
-        $container = $this->addUtilEncodingService($container);
         $container = $this->addUtilTextService($container);
 
         return $container;
@@ -57,11 +60,25 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function addPaymentFacade(Container $container): Container
+    protected function addPaymentExternalClient(Container $container): Container
     {
-        $container->set(static::FACADE_PAYMENT, function (Container $container) {
-            return new PaymentExternalToPaymentFacadeBridge(
-                $container->getLocator()->payment()->facade()
+        $container->set(static::CLIENT_PAYMENT_EXTERNAL, function (Container $container) {
+            return $container->getLocator()->paymentExternal()->client();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addLocaleFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_LOCALE, function (Container $container) {
+            return new PaymentExternalToLocaleFacadeBridge(
+                $container->getLocator()->locale()->facade()
             );
         });
 
@@ -73,11 +90,11 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function addUtilEncodingService(Container $container): Container
+    protected function addPaymentFacade(Container $container): Container
     {
-        $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
-            return new PaymentExternalToUtilEncodingServiceBridge(
-                $container->getLocator()->utilEncoding()->service()
+        $container->set(static::FACADE_PAYMENT, function (Container $container) {
+            return new PaymentExternalToPaymentFacadeBridge(
+                $container->getLocator()->payment()->facade()
             );
         });
 

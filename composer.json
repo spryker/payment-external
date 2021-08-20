@@ -5,11 +5,19 @@
     "license": "proprietary",
     "require": {
         "php": ">=7.3",
+        "psr/http-message": "^1.0.0",
+        "spryker/cart": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+        "spryker/checkout-extension": "^1.3.0",
+        "spryker/customer": "^7.4.0",
+        "spryker/guzzle": "^2.0.0",
         "spryker/kernel": "^3.30.0",
-        "spryker/payment": "^5.4.1",
+        "spryker/locale": "^1.0.0 || ^2.0.0 || ^3.0.0",
+        "spryker/payment": "^5.5.0",
         "spryker/payment-extension": "^1.0.0",
         "spryker/payment-gui-extension": "^1.0.0",
         "spryker/propel-orm": "^1.0.0",
+        "spryker/sales": "^11.11.0",
+        "spryker/symfony": "^3.0.0",
         "spryker/transfer": "^3.25.0",
         "spryker/util-encoding": "^1.0.0 || ^2.0.0",
         "spryker/util-text": "^1.0.0"
@@ -18,10 +26,12 @@
         "spryker/code-sniffer": "*",
         "spryker/event": "*",
         "spryker/propel": "*",
+        "spryker/router": "*",
         "spryker/testify": "*"
     },
     "suggest": {
-        "spryker/event": "If you want to use Event plugins, minimum required version: 2.1.0"
+        "spryker/event": "If you want to use Event plugins, minimum required version: 2.1.0",
+        "spryker/router": "Use this module when you want to use the Router."
     },
     "autoload": {
         "psr-4": {

@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Zed\PaymentExternal\Business\Deleter;
+namespace Spryker\Zed\PaymentExternal\Business\Disabler;
 
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
 use Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface;
 
-class PaymentExternalDeleter implements PaymentExternalDeleterInterface
+class PaymentExternalDisabler implements PaymentExternalDisablerInterface
 {
     /**
      * @var \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface
@@ -40,7 +40,7 @@ class PaymentExternalDeleter implements PaymentExternalDeleterInterface
      *
      * @return void
      */
-    public function deletePaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void
+    public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void
     {
         $paymentMethodTransfer->requireLabelName()
             ->requireGroupName();

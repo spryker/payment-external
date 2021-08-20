@@ -1,6 +1,7 @@
 namespace: SprykerTest
 include:
     - tests/SprykerTest/Zed/PaymentExternal
+    - tests/SprykerTest/Client/PaymentExternal
 paths:
     tests: tests/
     log: tests/_output/

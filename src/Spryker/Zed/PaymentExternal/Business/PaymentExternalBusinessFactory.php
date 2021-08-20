@@ -7,19 +7,24 @@
 
 namespace Spryker\Zed\PaymentExternal\Business;
 
+use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
-use Spryker\Zed\PaymentExternal\Business\Creator\PaymentExternalCreator;
-use Spryker\Zed\PaymentExternal\Business\Creator\PaymentExternalCreatorInterface;
-use Spryker\Zed\PaymentExternal\Business\Deleter\PaymentExternalDeleter;
-use Spryker\Zed\PaymentExternal\Business\Deleter\PaymentExternalDeleterInterface;
+use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnabler;
+use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnablerInterface;
+use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisabler;
+use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisablerInterface;
 use Spryker\Zed\PaymentExternal\Business\Expander\PaymentExternalMethodQueryExpander;
 use Spryker\Zed\PaymentExternal\Business\Expander\PaymentExternalMethodQueryExpanderInterface;
 use Spryker\Zed\PaymentExternal\Business\Filter\PaymentMethodsFilter;
 use Spryker\Zed\PaymentExternal\Business\Filter\PaymentMethodsFilterInterface;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGenerator;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
+use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHook;
+use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHookInterface;
+use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapper;
+use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
-use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
@@ -30,23 +35,22 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 class PaymentExternalBusinessFactory extends AbstractBusinessFactory
 {
     /**
-     * @return \Spryker\Zed\PaymentExternal\Business\Creator\PaymentExternalCreatorInterface
+     * @return \Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnablerInterface
      */
-    public function createPaymentExternalCreator(): PaymentExternalCreatorInterface
+    public function createPaymentExternalCreator(): PaymentExternalEnablerInterface
     {
-        return new PaymentExternalCreator(
+        return new PaymentExternalEnabler(
             $this->getPaymentFacade(),
-            $this->getUtilEncodingService(),
             $this->createPaymentMethodKeyGenerator()
         );
     }
 
     /**
-     * @return \Spryker\Zed\PaymentExternal\Business\Deleter\PaymentExternalDeleterInterface
+     * @return \Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisablerInterface
      */
-    public function createPaymentExternalDeleter(): PaymentExternalDeleterInterface
+    public function createPaymentExternalDeleter(): PaymentExternalDisablerInterface
     {
-        return new PaymentExternalDeleter(
+        return new PaymentExternalDisabler(
             $this->getEntityManager(),
             $this->createPaymentMethodKeyGenerator()
         );
@@ -77,19 +81,49 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
+     * @return \Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface
+     */
+    public function createQuoteDataMapper(): QuoteDataMapperInterface
+    {
+        return new QuoteDataMapper();
+    }
+
+    /**
+     * @return \Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHookInterface
+     */
+    public function createOrderPostSaveHook(): OrderPostSaveHookInterface
+    {
+        return new OrderPostSaveHook(
+            $this->createQuoteDataMapper(),
+            $this->getLocaleFacade(),
+            $this->getPaymentFacade(),
+            $this->getPaymentExternalClient(),
+            $this->getConfig()
+        );
+    }
+
+    /**
+     * @return \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
+     */
+    public function getPaymentExternalClient(): PaymentExternalClientInterface
+    {
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::CLIENT_PAYMENT_EXTERNAL);
+    }
+
+    /**
+     * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface
+     */
+    public function getLocaleFacade(): PaymentExternalToLocaleFacadeInterface
+    {
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_LOCALE);
+    }
+
+    /**
      * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface
      */
     public function getPaymentFacade(): PaymentExternalToPaymentFacadeInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_PAYMENT);
-    }
-
-    /**
-     * @return \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface
-     */
-    public function getUtilEncodingService(): PaymentExternalToUtilEncodingServiceInterface
-    {
-        return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_UTIL_ENCODING);
     }
 
     /**

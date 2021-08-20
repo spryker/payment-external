@@ -30,6 +30,6 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
             ->setLabelName($transfer->getName())
             ->setGroupName($transfer->getProviderName());
 
-        $this->getFacade()->deletePaymentMethod($paymentMethodTransfer);
+        $this->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
     }
 }

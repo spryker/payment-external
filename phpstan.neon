@@ -2,4 +2,5 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false
     ignoreErrors:
-        - '#Call to an undefined method Generated\\Zed\\Ide\\AutoCompletion\|Spryker\\Shared\\Kernel\\LocatorLocatorInterface::[a-zA-Z]*\(\)#'
+        - '#Call to an undefined method Generated\\[a-zA-Z]+\\Ide\\AutoCompletion\|Spryker\\Shared\\Kernel\\LocatorLocatorInterface::[a-zA-Z]+\(\)\.#'
+        - '#Call to an undefined method Spryker\\Shared\\Kernel\\Transfer\\AbstractTransfer::toArrayNotRecursiveCamelCased\(\)\.#'

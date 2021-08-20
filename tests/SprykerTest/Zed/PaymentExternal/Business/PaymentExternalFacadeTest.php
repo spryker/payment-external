@@ -8,10 +8,19 @@
 namespace SprykerTest\Zed\PaymentExternal\Business;
 
 use Codeception\Test\Unit;
+use Generated\Shared\DataBuilder\CheckoutResponseBuilder;
+use Generated\Shared\DataBuilder\QuoteBuilder;
+use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\PaymentExternalTokenRequestTransfer;
+use Generated\Shared\Transfer\PaymentExternalTokenResponseTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
+use Generated\Shared\Transfer\PaymentTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Orm\Zed\Payment\Persistence\Map\SpyPaymentMethodTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
+use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
 /**
  * Auto-generated group annotations
@@ -26,6 +35,10 @@ use Propel\Runtime\ActiveQuery\Criteria;
  */
 class PaymentExternalFacadeTest extends Unit
 {
+    protected const TOKEN = 'token-value';
+    protected const CHECKOUT_ORDER_TOKEN_URL = 'checkout-order-token-url';
+    protected const CHECKOUT_REDIRECT_URL = 'checkout-redirect-url';
+
     /**
      * @var \SprykerTest\Zed\PaymentExternal\PaymentExternalBusinessTester
      */
@@ -34,7 +47,7 @@ class PaymentExternalFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testAddPaymentMethodReturnsSavedPaymentMethodTransferWithCorrectData(): void
+    public function testEnableExternalPaymentMethodReturnsSavedPaymentMethodTransferWithCorrectData(): void
     {
         // Arrange
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
@@ -46,7 +59,7 @@ class PaymentExternalFacadeTest extends Unit
 
         // Act
         $createdPaymentMethodTransfer = $this->tester->getFacade()
-            ->addPaymentMethod($paymentMethodTransfer);
+            ->enableExternalPaymentMethod($paymentMethodTransfer);
 
         // Assert
         $this->assertNotNull($createdPaymentMethodTransfer->getIdPaymentMethod());
@@ -62,7 +75,7 @@ class PaymentExternalFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testDeletePaymentMethodSetsPaymentMethodIsDeletedFlagToTrueWithCorrectData(): void
+    public function testDisableExternalPaymentMethodSetsPaymentMethodIsDeletedFlagToTrueWithCorrectData(): void
     {
         // Arrange
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
@@ -74,9 +87,9 @@ class PaymentExternalFacadeTest extends Unit
 
         // Act
         $paymentMethodTransfer = $this->tester->getFacade()
-            ->addPaymentMethod($paymentMethodTransfer);
+            ->enableExternalPaymentMethod($paymentMethodTransfer);
 
-        $this->tester->getFacade()->deletePaymentMethod($paymentMethodTransfer);
+        $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
         $filterPaymentMethodTransfer = (new PaymentMethodTransfer())
             ->setIdPaymentMethod($paymentMethodTransfer->getIdPaymentMethod());
         $updatedPaymentMethodTransfer = $this->tester->findPaymentMethod($filterPaymentMethodTransfer);
@@ -127,5 +140,106 @@ class PaymentExternalFacadeTest extends Unit
         $this->assertSame(Criteria::EQUAL, $queryCriteriaTransfer->getWhereConditions()[0]->getComparison());
         $this->assertSame('0', $queryCriteriaTransfer->getWhereConditions()[0]->getValue());
         $this->assertSame(Criteria::LOGICAL_AND, $queryCriteriaTransfer->getConditionOperator());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteOrderPostSaveHookReceivesTokenAndUsingItAddsRedirectUrlWithCorrectData(): void
+    {
+        $paymentProviderTransfer = $this->tester->havePaymentProvider();
+        $paymentMethodTransfer = $this->tester->havePaymentMethod([
+            PaymentMethodTransfer::IS_DELETED => false,
+            PaymentMethodTransfer::IS_EXTERNAL => true,
+            PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => static::CHECKOUT_ORDER_TOKEN_URL,
+            PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => static::CHECKOUT_REDIRECT_URL,
+            PaymentMethodTransfer::ID_PAYMENT_PROVIDER => $paymentProviderTransfer->getIdPaymentProvider(),
+        ]);
+
+        $paymentTransfer = (new PaymentTransfer())->setPaymentSelection(
+            sprintf('%s[%s]', PaymentTransfer::EXTERNAL_PAYMENTS, $paymentMethodTransfer->getPaymentMethodKey())
+        );
+
+        $quoteTransfer = $this->buildQuoteTransfer();
+        $quoteTransfer->setPayment($paymentTransfer);
+        $checkoutResponseTransfer = $this->buildCheckoutResponseTransfer();
+
+        $paymentExternalClientMock = $this->getPaymentExternalClientMock();
+        $paymentExternalClientMock->expects($this->once())
+            ->method('generatePaymentExternalToken')
+            ->with($this->callback(function (PaymentExternalTokenRequestTransfer $paymentExternalTokenRequestTransfer) {
+                return $paymentExternalTokenRequestTransfer->getRequestUrl() === static::CHECKOUT_ORDER_TOKEN_URL;
+            }))
+            ->willReturn(
+                (new PaymentExternalTokenResponseTransfer())
+                    ->setIsSuccessful(true)
+                    ->setToken(static::TOKEN)
+            );
+
+        $this->tester->getFacade()->executeOrderPostSaveHook($quoteTransfer, $checkoutResponseTransfer);
+
+        $this->assertTrue($checkoutResponseTransfer->getIsExternalRedirect());
+        $this->assertStringContainsString(static::CHECKOUT_REDIRECT_URL, $checkoutResponseTransfer->getRedirectUrl());
+        $this->assertStringContainsString(static::TOKEN, $checkoutResponseTransfer->getRedirectUrl());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteOrderPostSaveHookDoesNothingWithIncorrectData(): void
+    {
+        $paymentProviderTransfer = $this->tester->havePaymentProvider();
+        $paymentMethodTransfer = $this->tester->havePaymentMethod([
+            PaymentMethodTransfer::ID_PAYMENT_PROVIDER => $paymentProviderTransfer->getIdPaymentProvider(),
+        ]);
+
+        $initialQuoteTransfer = $this->buildQuoteTransfer();
+        $initialQuoteTransfer->setPayment(
+            (new PaymentTransfer())->setPaymentSelection($paymentMethodTransfer->getPaymentMethodKey())
+        );
+        $initialCheckoutResponseTransfer = $this->buildCheckoutResponseTransfer();
+
+        $quoteTransfer = clone $initialQuoteTransfer;
+        $checkoutResponseTransfer = clone $initialCheckoutResponseTransfer;
+        $this->tester->getFacade()->executeOrderPostSaveHook($quoteTransfer, $checkoutResponseTransfer);
+
+        $this->assertEquals($initialQuoteTransfer->toArray(), $quoteTransfer->toArray());
+        $this->assertEquals($initialCheckoutResponseTransfer->toArray(), $checkoutResponseTransfer->toArray());
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Spryker\Client\PaymentExternal\PaymentExternalClientInterface
+     */
+    protected function getPaymentExternalClientMock(): PaymentExternalClientInterface
+    {
+        $paymentExternalClient = $this->getMockBuilder(PaymentExternalClientInterface::class)->getMock();
+        $this->tester->setDependency(PaymentExternalDependencyProvider::CLIENT_PAYMENT_EXTERNAL, $paymentExternalClient);
+
+        return $paymentExternalClient;
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\CheckoutResponseTransfer
+     */
+    protected function buildCheckoutResponseTransfer(): CheckoutResponseTransfer
+    {
+        return (new CheckoutResponseBuilder())
+            ->withSaveOrder()
+            ->build();
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\QuoteTransfer
+     */
+    protected function buildQuoteTransfer(): QuoteTransfer
+    {
+        return (new QuoteBuilder())
+            ->withItem()
+            ->withStore()
+            ->withCustomer()
+            ->withTotals()
+            ->withCurrency()
+            ->withBillingAddress()
+            ->build();
     }
 }

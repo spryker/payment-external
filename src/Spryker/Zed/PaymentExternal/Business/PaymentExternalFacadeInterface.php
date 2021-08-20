@@ -7,9 +7,11 @@
 
 namespace Spryker\Zed\PaymentExternal\Business;
 
+use Generated\Shared\Transfer\CheckoutResponseTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\QueryCriteriaTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 
 interface PaymentExternalFacadeInterface
 {
@@ -20,7 +22,8 @@ interface PaymentExternalFacadeInterface
      * - Requires PaymentMethodTransfer.checkoutOrderTokenUrl transfer field to be set.
      * - Requires PaymentMethodTransfer.checkoutRedirectUrl transfer field to be set.
      * - Creates payment provider if respective provider doesn't exist in DB
-     * - Creates payment method.
+     * - Creates payment method if the payment method with provided key doesn't exist in DB.
+     * - Updates payment method otherwise.
      * - Returns PaymentMethod transfer filled with payment method data.
      *
      * @api
@@ -29,7 +32,7 @@ interface PaymentExternalFacadeInterface
      *
      * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
-    public function addPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer;
+    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer;
 
     /**
      * Specification:
@@ -44,7 +47,7 @@ interface PaymentExternalFacadeInterface
      *
      * @return void
      */
-    public function deletePaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void;
+    public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void;
 
     /**
      * Specification:
@@ -68,4 +71,25 @@ interface PaymentExternalFacadeInterface
      * @return \Generated\Shared\Transfer\QueryCriteriaTransfer
      */
     public function buildNotDeletedPaymentMethodTableQueryCriteria(): QueryCriteriaTransfer;
+
+    /**
+     * Specification:
+     * - Check whether the given order has a payment method external selected.
+     * - Terminates hook execution if not.
+     * - Receives all the necessary information about the payment method external.
+     * - Sends a request with all pre-selected quote fields using PaymentMethodTransfer.checkoutOrderTokenUrl.
+     * - If the response is free of errors, uses PaymentMethodTransfer.checkoutRedirectUrl and response data to build a redirect URL.
+     * - Updates CheckoutResponseTransfer with errors or the redirect URL according to response received.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     *
+     * @return void
+     */
+    public function executeOrderPostSaveHook(
+        QuoteTransfer $quoteTransfer,
+        CheckoutResponseTransfer $checkoutResponseTransfer
+    ): void;
 }

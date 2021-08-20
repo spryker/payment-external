@@ -56,4 +56,24 @@ class PaymentExternalToPaymentFacadeBridge implements PaymentExternalToPaymentFa
     {
         return $this->paymentFacade->findPaymentProvider($paymentProviderTransfer);
     }
+
+    /**
+     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodTransfer|null
+     */
+    public function findPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): ?PaymentMethodTransfer
+    {
+        return $this->paymentFacade->findPaymentMethod($paymentMethodTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodResponseTransfer
+     */
+    public function updatePaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodResponseTransfer
+    {
+        return $this->paymentFacade->updatePaymentMethod($paymentMethodTransfer);
+    }
 }

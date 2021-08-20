@@ -5,25 +5,19 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Zed\PaymentExternal\Business\Creator;
+namespace Spryker\Zed\PaymentExternal\Business\Enabler;
 
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
-use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface;
 
-class PaymentExternalCreator implements PaymentExternalCreatorInterface
+class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 {
     /**
      * @var \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface
      */
     protected $paymentFacade;
-
-    /**
-     * @var \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface
-     */
-    protected $utilEncodingService;
 
     /**
      * @var \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface
@@ -32,16 +26,13 @@ class PaymentExternalCreator implements PaymentExternalCreatorInterface
 
     /**
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
-     * @param \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface $utilEncodingService
      * @param \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
      */
     public function __construct(
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
-        PaymentExternalToUtilEncodingServiceInterface $utilEncodingService,
         PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
     ) {
         $this->paymentFacade = $paymentFacade;
-        $this->utilEncodingService = $utilEncodingService;
         $this->paymentMethodKeyGenerator = $paymentMethodKeyGenerator;
     }
 
@@ -50,7 +41,7 @@ class PaymentExternalCreator implements PaymentExternalCreatorInterface
      *
      * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
-    public function addPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
+    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
     {
         $paymentMethodTransfer->requireLabelName()
             ->requireGroupName()
@@ -68,7 +59,18 @@ class PaymentExternalCreator implements PaymentExternalCreatorInterface
             ->setName($paymentMethodTransfer->getLabelName())
             ->setIdPaymentProvider($paymentProviderTransfer->getIdPaymentProvider())
             ->setPaymentMethodKey($paymentMethodKey)
-            ->setIsExternal(true);
+            ->setIsExternal(true)
+            ->setIsActive(false);
+
+        $existingPaymentMethodTransfer = $this->paymentFacade->findPaymentMethod($paymentMethodTransfer);
+        if ($existingPaymentMethodTransfer) {
+            $existingPaymentMethodTransfer->fromArray($paymentMethodTransfer->modifiedToArray())
+                ->setIsDeleted(false);
+
+            $paymentMethodResponseTransfer = $this->paymentFacade->updatePaymentMethod($existingPaymentMethodTransfer);
+
+            return $paymentMethodResponseTransfer->getPaymentMethodOrFail();
+        }
 
         $paymentMethodResponseTransfer = $this->paymentFacade->createPaymentMethod($paymentMethodTransfer);
 

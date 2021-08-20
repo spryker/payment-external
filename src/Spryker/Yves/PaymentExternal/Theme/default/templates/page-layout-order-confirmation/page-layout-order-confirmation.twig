@@ -1,0 +1,31 @@
+{% extends template('page-layout-main') %}
+
+{% define data = {
+    breadcrumbs: _view.stepBreadcrumbs.breadcrumbs | default([]),
+    title: required,
+    message: required
+} %}
+
+{% block sidebar %}{% endblock %}
+
+{% block header %}
+    {% include organism('header') with {
+        data: {
+            showSearchForm: false,
+            showNavigation: false
+        }
+    } only %}
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block pageInfo %}{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <h3>{{data.title}}</h3>
+        <p>{{data.message}}</p>
+        <a href="{{ url('customer/overview') }}">{{ 'payment_external.go_to_my_account' | trans }}</a>
+    </div>
+{% endblock %}
+

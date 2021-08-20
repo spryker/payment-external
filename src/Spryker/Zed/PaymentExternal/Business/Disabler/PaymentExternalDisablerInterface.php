@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Zed\PaymentExternal\Business\Deleter;
+namespace Spryker\Zed\PaymentExternal\Business\Disabler;
 
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 
-interface PaymentExternalDeleterInterface
+interface PaymentExternalDisablerInterface
 {
     /**
      * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
      *
      * @return void
      */
-    public function deletePaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void;
+    public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void;
 }

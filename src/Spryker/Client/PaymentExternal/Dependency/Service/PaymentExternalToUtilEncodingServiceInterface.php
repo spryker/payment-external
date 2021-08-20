@@ -5,19 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Zed\PaymentExternal\Dependency\Service;
+namespace Spryker\Client\PaymentExternal\Dependency\Service;
 
 interface PaymentExternalToUtilEncodingServiceInterface
 {
     /**
-     * Specification:
-     * - Encodes given value to JSON string.
-     *
-     * @param array $value
-     * @param int|null $options
+     * @param string $jsonValue
+     * @param bool $assoc
      * @param int|null $depth
+     * @param int|null $options
      *
-     * @return string|null
+     * @return mixed|null
      */
-    public function encodeJson($value, $options = null, $depth = null);
+    public function decodeJson($jsonValue, $assoc = false, $depth = null, $options = null);
 }

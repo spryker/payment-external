@@ -7,8 +7,99 @@
 
 namespace Spryker\Zed\PaymentExternal;
 
+use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\CurrencyTransfer;
+use Generated\Shared\Transfer\CustomerTransfer;
+use Generated\Shared\Transfer\LocaleTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
+use Generated\Shared\Transfer\StoreTransfer;
+use Generated\Shared\Transfer\TotalsTransfer;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class PaymentExternalConfig extends AbstractBundleConfig
 {
+    /**
+     * @uses \Spryker\Shared\Application\ApplicationConstants::BASE_URL_YVES
+     */
+    protected const BASE_URL_YVES = 'APPLICATION:BASE_URL_YVES';
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getSuccessRoute(): string
+    {
+        return '/payment/order-success';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getCancelRoute(): string
+    {
+        return '/payment/order-cancel';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getBaseUrlYves(): string
+    {
+        return $this->get(static::BASE_URL_YVES);
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getTenantUuid(): string
+    {
+        return getenv('TENANT_UUID') ?: '';
+    }
+
+    /**
+     * @api
+     *
+     * @example
+     * [
+     *     QuoteTransfer::ORDER_REFERENCE => 'orderReference',
+     *     QuoteTransfer::ITEMS => [
+     *         ItemTransfer::NAME => 'itemName',
+     *         ItemTransfer::ABSTRACT_SKU => 'abstractSku',
+     *     ],
+     * ]
+     *
+     * @return mixed[]
+     */
+    public function getQuoteFieldsAllowedForSending(): array
+    {
+        return [
+            QuoteTransfer::ORDER_REFERENCE => 'orderReference',
+            QuoteTransfer::STORE => [
+                StoreTransfer::NAME => 'storeName',
+            ],
+            QuoteTransfer::CUSTOMER => [
+                CustomerTransfer::FIRST_NAME => 'customerFirstName',
+                CustomerTransfer::LAST_NAME => 'customerLastName',
+                CustomerTransfer::LOCALE => [
+                    LocaleTransfer::LOCALE_NAME => 'localeName',
+                ],
+            ],
+            QuoteTransfer::BILLING_ADDRESS => [
+                AddressTransfer::ISO2_CODE => 'countryCode',
+            ],
+            QuoteTransfer::CURRENCY => [
+                CurrencyTransfer::CODE => 'currencyCode',
+            ],
+            QuoteTransfer::TOTALS => [
+                TotalsTransfer::GRAND_TOTAL => 'grandTotal',
+            ],
+        ];
+    }
 }

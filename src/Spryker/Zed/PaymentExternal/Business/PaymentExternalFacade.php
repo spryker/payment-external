@@ -7,9 +7,11 @@
 
 namespace Spryker\Zed\PaymentExternal\Business;
 
+use Generated\Shared\Transfer\CheckoutResponseTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\QueryCriteriaTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
@@ -27,11 +29,11 @@ class PaymentExternalFacade extends AbstractFacade implements PaymentExternalFac
      *
      * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
-    public function addPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
+    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
     {
         return $this->getFactory()
             ->createPaymentExternalCreator()
-            ->addPaymentMethod($paymentMethodTransfer);
+            ->enableExternalPaymentMethod($paymentMethodTransfer);
     }
 
     /**
@@ -43,11 +45,11 @@ class PaymentExternalFacade extends AbstractFacade implements PaymentExternalFac
      *
      * @return void
      */
-    public function deletePaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void
+    public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void
     {
         $this->getFactory()
             ->createPaymentExternalDeleter()
-            ->deletePaymentMethod($paymentMethodTransfer);
+            ->disableExternalPaymentMethod($paymentMethodTransfer);
     }
 
     /**
@@ -78,5 +80,24 @@ class PaymentExternalFacade extends AbstractFacade implements PaymentExternalFac
         return $this->getFactory()
             ->createPaymentExternalMethodQueryExpander()
             ->buildNotDeletedPaymentMethodTableQueryCriteria();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     *
+     * @return void
+     */
+    public function executeOrderPostSaveHook(
+        QuoteTransfer $quoteTransfer,
+        CheckoutResponseTransfer $checkoutResponseTransfer
+    ): void {
+        $this->getFactory()
+            ->createOrderPostSaveHook()
+            ->executeOrderPostSaveHook($quoteTransfer, $checkoutResponseTransfer);
     }
 }

@@ -32,6 +32,6 @@ class PaymentExternalMethodAddedEventListener extends AbstractPlugin implements 
             ->setCheckoutOrderTokenUrl($transfer->getCheckoutOrderTokenUrl())
             ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl());
 
-        $this->getFacade()->addPaymentMethod($paymentMethodTransfer);
+        $this->getFacade()->enableExternalPaymentMethod($paymentMethodTransfer);
     }
 }
