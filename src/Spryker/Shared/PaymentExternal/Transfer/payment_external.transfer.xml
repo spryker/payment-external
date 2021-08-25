@@ -29,6 +29,11 @@
         <property name="code" type="string"/>
     </transfer>
 
+    <transfer name="Item">
+        <property name="id" type="int"/>
+        <property name="name" type="string"/>
+    </transfer>
+
     <transfer name="Locale">
         <property name="localeName" type="string"/>
     </transfer>

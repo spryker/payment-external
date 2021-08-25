@@ -10,6 +10,7 @@ namespace Spryker\Zed\PaymentExternal;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CurrencyTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
+use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\LocaleTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
@@ -99,6 +100,10 @@ class PaymentExternalConfig extends AbstractBundleConfig
             ],
             QuoteTransfer::TOTALS => [
                 TotalsTransfer::GRAND_TOTAL => 'grandTotal',
+            ],
+            QuoteTransfer::ITEMS => [
+                ItemTransfer::ID => 'id',
+                ItemTransfer::NAME => 'name',
             ],
         ];
     }
