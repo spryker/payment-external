@@ -30,7 +30,7 @@
     </transfer>
 
     <transfer name="Item">
-        <property name="id" type="int"/>
+        <property name="idSalesOrderItem" type="int"/>
         <property name="name" type="string"/>
     </transfer>
 

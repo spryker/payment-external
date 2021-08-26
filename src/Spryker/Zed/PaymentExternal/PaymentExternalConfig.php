@@ -102,7 +102,7 @@ class PaymentExternalConfig extends AbstractBundleConfig
                 TotalsTransfer::GRAND_TOTAL => 'grandTotal',
             ],
             QuoteTransfer::ITEMS => [
-                ItemTransfer::ID => 'id',
+                ItemTransfer::ID_SALES_ORDER_ITEM => 'idSalesOrderItem',
                 ItemTransfer::NAME => 'name',
             ],
         ];
