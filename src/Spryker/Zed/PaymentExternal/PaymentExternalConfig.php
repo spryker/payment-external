@@ -12,6 +12,8 @@ use Generated\Shared\Transfer\CurrencyTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\LocaleTransfer;
+use Generated\Shared\Transfer\PaymentMethodTransfer;
+use Generated\Shared\Transfer\PaymentTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Generated\Shared\Transfer\TotalsTransfer;
@@ -104,6 +106,9 @@ class PaymentExternalConfig extends AbstractBundleConfig
             QuoteTransfer::ITEMS => [
                 ItemTransfer::ID_SALES_ORDER_ITEM => 'idSalesOrderItem',
                 ItemTransfer::NAME => 'name',
+            ],
+            QuoteTransfer::PAYMENT => [
+                PaymentTransfer::PAYMENT_METHOD => 'paymentMethod',
             ],
         ];
     }
