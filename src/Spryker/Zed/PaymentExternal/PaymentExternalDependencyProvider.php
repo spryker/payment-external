@@ -12,6 +12,7 @@ use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeBridge;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceBridge;
 
 /**
@@ -23,6 +24,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
 
     public const FACADE_LOCALE = 'FACADE_LOCALE';
     public const FACADE_PAYMENT = 'FACADE_PAYMENT';
+    public const FACADE_SALES = 'FACADE_SALES';
 
     public const SERVICE_UTIL_TEXT = 'SERVICE_UTIL_TEXT';
 
@@ -38,6 +40,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addPaymentExternalClient($container);
         $container = $this->addLocaleFacade($container);
         $container = $this->addPaymentFacade($container);
+        $container = $this->addSalesFacade($container);
         $container = $this->addUtilTextService($container);
 
         return $container;
@@ -95,6 +98,22 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
         $container->set(static::FACADE_PAYMENT, function (Container $container) {
             return new PaymentExternalToPaymentFacadeBridge(
                 $container->getLocator()->payment()->facade()
+            );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addSalesFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_SALES, function (Container $container) {
+            return new PaymentExternalToSalesFacadeBridge(
+                $container->getLocator()->sales()->facade()
             );
         });
 

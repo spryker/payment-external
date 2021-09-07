@@ -17,9 +17,11 @@ suites:
         modules:
             enabled:
                 - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper
                 - \SprykerTest\Shared\Testify\Helper\DataCleanupHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Payment\Helper\PaymentDataHelper
+                - \SprykerTest\Zed\Sales\Helper\BusinessHelper
                 - \SprykerTest\Shared\PaymentExternal\Helper\PaymentExternalDataHelper

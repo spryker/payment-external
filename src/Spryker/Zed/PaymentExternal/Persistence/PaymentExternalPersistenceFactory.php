@@ -10,6 +10,7 @@ namespace Spryker\Zed\PaymentExternal\Persistence;
 use Orm\Zed\Payment\Persistence\SpyPaymentMethodQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
+use Spryker\Zed\PaymentExternal\Persistence\Propel\Mapper\SalesOrderMapper;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface getEntityManager()
@@ -17,6 +18,14 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
  */
 class PaymentExternalPersistenceFactory extends AbstractPersistenceFactory
 {
+    /**
+     * @return \Spryker\Zed\PaymentExternal\Persistence\Propel\Mapper\SalesOrderMapper
+     */
+    public function createSalesOrderMapper(): SalesOrderMapper
+    {
+        return new SalesOrderMapper();
+    }
+
     /**
      * @return \Orm\Zed\Payment\Persistence\SpyPaymentMethodQuery
      */

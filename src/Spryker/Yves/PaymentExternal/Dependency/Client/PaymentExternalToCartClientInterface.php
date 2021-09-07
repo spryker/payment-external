@@ -10,6 +10,11 @@ namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 interface PaymentExternalToCartClientInterface
 {
     /**
+     * @return \Generated\Shared\Transfer\QuoteTransfer
+     */
+    public function getQuote();
+
+    /**
      * @return void
      */
     public function clearQuote();

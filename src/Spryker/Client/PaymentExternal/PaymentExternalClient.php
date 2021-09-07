@@ -7,6 +7,10 @@
 
 namespace Spryker\Client\PaymentExternal;
 
+use Generated\Shared\Transfer\OrderCancelRequestTransfer;
+use Generated\Shared\Transfer\OrderCancelResponseTransfer;
+use Generated\Shared\Transfer\OrderFilterTransfer;
+use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenRequestTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenResponseTransfer;
 use Spryker\Client\Kernel\AbstractClient;
@@ -31,5 +35,37 @@ class PaymentExternalClient extends AbstractClient implements PaymentExternalCli
         return $this->getFactory()
             ->createPaymentExternalRequestExecutor()
             ->generatePaymentExternalToken($paymentExternalTokenRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\OrderCancelRequestTransfer $orderCancelRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\OrderCancelResponseTransfer
+     */
+    public function cancelOrder(OrderCancelRequestTransfer $orderCancelRequestTransfer): OrderCancelResponseTransfer
+    {
+        return $this->getFactory()
+            ->createZedPaymentExternalStub()
+            ->cancelOrder($orderCancelRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\OrderFilterTransfer $orderFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\OrderTransfer
+     */
+    public function getGuestOrder(OrderFilterTransfer $orderFilterTransfer): OrderTransfer
+    {
+        return $this->getFactory()
+            ->createZedPaymentExternalStub()
+            ->getGuestOrder($orderFilterTransfer);
     }
 }

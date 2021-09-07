@@ -5,16 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Yves\PaymentExternal\Dependency\Client;
+namespace Spryker\Zed\PaymentExternal\Business\Reader;
 
+use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 
-interface PaymentExternalToSalesClientInterface
+interface OrderReaderInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\OrderTransfer $orderTransfer
+     * @param \Generated\Shared\Transfer\OrderFilterTransfer $orderFilterTransfer
      *
      * @return \Generated\Shared\Transfer\OrderTransfer
      */
-    public function getCustomerOrderByOrderReference(OrderTransfer $orderTransfer): OrderTransfer;
+    public function getGuestOrder(OrderFilterTransfer $orderFilterTransfer): OrderTransfer;
 }

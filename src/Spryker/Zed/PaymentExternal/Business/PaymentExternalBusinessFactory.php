@@ -9,10 +9,10 @@ namespace Spryker\Zed\PaymentExternal\Business;
 
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
-use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnabler;
-use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnablerInterface;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisabler;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisablerInterface;
+use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnabler;
+use Spryker\Zed\PaymentExternal\Business\Enabler\PaymentExternalEnablerInterface;
 use Spryker\Zed\PaymentExternal\Business\Expander\PaymentExternalMethodQueryExpander;
 use Spryker\Zed\PaymentExternal\Business\Expander\PaymentExternalMethodQueryExpanderInterface;
 use Spryker\Zed\PaymentExternal\Business\Filter\PaymentMethodsFilter;
@@ -23,8 +23,11 @@ use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHook;
 use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHookInterface;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapper;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
+use Spryker\Zed\PaymentExternal\Business\Reader\OrderReader;
+use Spryker\Zed\PaymentExternal\Business\Reader\OrderReaderInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
@@ -103,6 +106,14 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
+     * @return \Spryker\Zed\PaymentExternal\Business\Reader\OrderReaderInterface
+     */
+    public function createOrderReader(): OrderReaderInterface
+    {
+        return new OrderReader($this->getSalesFacade());
+    }
+
+    /**
      * @return \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
      */
     public function getPaymentExternalClient(): PaymentExternalClientInterface
@@ -124,6 +135,14 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     public function getPaymentFacade(): PaymentExternalToPaymentFacadeInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_PAYMENT);
+    }
+
+    /**
+     * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeInterface
+     */
+    public function getSalesFacade(): PaymentExternalToSalesFacadeInterface
+    {
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_SALES);
     }
 
     /**
