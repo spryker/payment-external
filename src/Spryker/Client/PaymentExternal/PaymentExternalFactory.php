@@ -8,10 +8,13 @@
 namespace Spryker\Client\PaymentExternal;
 
 use Spryker\Client\Kernel\AbstractFactory;
+use Spryker\Client\PaymentExternal\Dependency\Client\PaymentExternalToZedRequestClientInterface;
 use Spryker\Client\PaymentExternal\Dependency\External\PaymentExternalToHttpClientAdapterInterface;
 use Spryker\Client\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceInterface;
 use Spryker\Client\PaymentExternal\Executor\PaymentExternalRequestExecutor;
 use Spryker\Client\PaymentExternal\Executor\PaymentExternalRequestExecutorInterface;
+use Spryker\Client\PaymentExternal\Zed\PaymentExternalStub;
+use Spryker\Client\PaymentExternal\Zed\PaymentExternalStubInterface;
 
 class PaymentExternalFactory extends AbstractFactory
 {
@@ -24,6 +27,14 @@ class PaymentExternalFactory extends AbstractFactory
             $this->getUtilEncodingService(),
             $this->getHttpClient()
         );
+    }
+
+    /**
+     * @return \Spryker\Client\PaymentExternal\Zed\PaymentExternalStubInterface
+     */
+    public function createZedPaymentExternalStub(): PaymentExternalStubInterface
+    {
+        return new PaymentExternalStub($this->getZedRequestClient());
     }
 
     /**
@@ -40,5 +51,13 @@ class PaymentExternalFactory extends AbstractFactory
     public function getHttpClient(): PaymentExternalToHttpClientAdapterInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::CLIENT_HTTP);
+    }
+
+    /**
+     * @return \Spryker\Client\PaymentExternal\Dependency\Client\PaymentExternalToZedRequestClientInterface
+     */
+    public function getZedRequestClient(): PaymentExternalToZedRequestClientInterface
+    {
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::CLIENT_ZED_REQUEST);
     }
 }

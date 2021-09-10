@@ -8,6 +8,10 @@
 namespace Spryker\Zed\PaymentExternal\Business;
 
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\OrderCancelRequestTransfer;
+use Generated\Shared\Transfer\OrderCancelResponseTransfer;
+use Generated\Shared\Transfer\OrderFilterTransfer;
+use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\QueryCriteriaTransfer;
@@ -99,5 +103,35 @@ class PaymentExternalFacade extends AbstractFacade implements PaymentExternalFac
         $this->getFactory()
             ->createOrderPostSaveHook()
             ->executeOrderPostSaveHook($quoteTransfer, $checkoutResponseTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\OrderCancelRequestTransfer $orderCancelRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\OrderCancelResponseTransfer
+     */
+    public function cancelOrder(OrderCancelRequestTransfer $orderCancelRequestTransfer): OrderCancelResponseTransfer
+    {
+        return $this->getFactory()->getSalesFacade()
+            ->cancelOrder($orderCancelRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\OrderFilterTransfer $orderFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\OrderTransfer
+     */
+    public function getGuestOrder(OrderFilterTransfer $orderFilterTransfer): OrderTransfer
+    {
+        return $this->getFactory()->createOrderReader()
+            ->getGuestOrder($orderFilterTransfer);
     }
 }

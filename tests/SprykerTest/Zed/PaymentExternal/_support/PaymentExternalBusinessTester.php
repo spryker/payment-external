@@ -8,10 +8,13 @@
 namespace SprykerTest\Zed\PaymentExternal;
 
 use Codeception\Actor;
+use Generated\Shared\DataBuilder\OrderFilterBuilder;
 use Generated\Shared\DataBuilder\PaymentMethodBuilder;
 use Generated\Shared\DataBuilder\PaymentProviderBuilder;
+use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
+use Orm\Zed\Sales\Persistence\SpySalesOrder;
 
 /**
  * Inherited Methods
@@ -52,5 +55,27 @@ class PaymentExternalBusinessTester extends Actor
     public function getPaymentProviderTransfer(array $seedData = []): PaymentProviderTransfer
     {
         return (new PaymentProviderBuilder($seedData))->build();
+    }
+
+    /**
+     * @param mixed[] $seedData
+     *
+     * @return \Generated\Shared\Transfer\OrderFilterTransfer
+     */
+    public function getOrderFilterTransfer(array $seedData = []): OrderFilterTransfer
+    {
+        return (new OrderFilterBuilder($seedData))->build();
+    }
+
+    /**
+     * @return \Orm\Zed\Sales\Persistence\SpySalesOrder
+     */
+    public function haveGuestOrderEntity(): SpySalesOrder
+    {
+        $orderEntity = $this->haveSalesOrderEntity();
+        $orderEntity->setCustomerReference(null);
+        $orderEntity->save();
+
+        return $orderEntity;
     }
 }

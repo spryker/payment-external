@@ -10,17 +10,18 @@ namespace Spryker\Yves\PaymentExternal\Controller;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\OrderCancelRequestTransfer;
 use Generated\Shared\Transfer\OrderCancelResponseTransfer;
+use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Yves\Kernel\Controller\AbstractController;
 use Spryker\Yves\Kernel\View\View;
-use Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToCustomerClientInterface;
-use Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToSalesClientInterface;
+use Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToCartClientInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @method \Spryker\Yves\PaymentExternal\PaymentExternalFactory getFactory()
+ * @method \Spryker\Client\PaymentExternal\PaymentExternalClientInterface getClient()
  */
 class OrderCancelController extends AbstractController
 {
@@ -34,58 +35,39 @@ class OrderCancelController extends AbstractController
      */
     public function indexAction(Request $request): View
     {
-        $salesClient = $this->getFactory()->getSalesClient();
         $customerClient = $this->getFactory()->getCustomerClient();
+        $cartClient = $this->getFactory()->getCartClient();
 
-        $customerTransfer = $this->getCustomerTransfer($customerClient);
+        $orderReference = $this->getOrderReference($request);
+        $customerTransfer = $customerClient->getCustomer();
 
         $orderTransfer = $this->getOrderTransfer(
-            $this->getOrderReference($request),
-            $customerTransfer->getCustomerReferenceOrFail(),
-            $salesClient
+            $cartClient,
+            $orderReference,
+            $customerTransfer
         );
 
         $orderCancelRequestTransfer = (new OrderCancelRequestTransfer())
             ->setCustomer($customerTransfer)
             ->setIdSalesOrder($orderTransfer->getIdSalesOrder());
 
-        $orderCancelResponseTransfer = $salesClient->cancelOrder($orderCancelRequestTransfer);
+        $orderCancelResponseTransfer = $this->getClient()->cancelOrder($orderCancelRequestTransfer);
 
         $this->handleResponseErrors($orderCancelResponseTransfer);
 
         if ($orderCancelResponseTransfer->getIsSuccessful()) {
             $this->addSuccessMessage(static::GLOSSARY_KEY_ORDER_CANCELLED);
             $customerClient->markCustomerAsDirty();
-            $this->getFactory()->getCartClient()->clearQuote();
+            $cartClient->clearQuote();
         }
 
         return $this->view([], [], '@PaymentExternal/views/order-cancel/index.twig');
     }
 
     /**
-     * @param \Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToCustomerClientInterface $customerClient
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     *
-     * @return \Generated\Shared\Transfer\CustomerTransfer
-     */
-    protected function getCustomerTransfer(PaymentExternalToCustomerClientInterface $customerClient): CustomerTransfer
-    {
-        $customerTransfer = $customerClient->getCustomer();
-
-        if (!$customerTransfer) {
-            throw new NotFoundHttpException(
-                'Only logged in customers are allowed to access this page'
-            );
-        }
-
-        return $customerTransfer;
-    }
-
-    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
      * @return string
      */
@@ -94,9 +76,7 @@ class OrderCancelController extends AbstractController
         $orderReference = (string)$request->query->get(static::REQUEST_PARAMETER_ORDER_REFERENCE);
 
         if (!$orderReference) {
-            throw new BadRequestHttpException(
-                'Provide orderReference parameter'
-            );
+            throw new NotFoundHttpException();
         }
 
         return $orderReference;
@@ -117,21 +97,81 @@ class OrderCancelController extends AbstractController
     }
 
     /**
+     * @param \Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToCartClientInterface $cartClient
      * @param string $orderReference
-     * @param string $customerReference
-     * @param \Spryker\Yves\PaymentExternal\Dependency\Client\PaymentExternalToSalesClientInterface $salesClient
+     * @param \Generated\Shared\Transfer\CustomerTransfer|null $customerTransfer
      *
      * @return \Generated\Shared\Transfer\OrderTransfer
      */
     protected function getOrderTransfer(
+        PaymentExternalToCartClientInterface $cartClient,
         string $orderReference,
-        string $customerReference,
-        PaymentExternalToSalesClientInterface $salesClient
+        ?CustomerTransfer $customerTransfer = null
+    ): OrderTransfer {
+        if (!$customerTransfer) {
+            return $this->getGuestOrderTransfer(
+                $cartClient->getQuote(),
+                $orderReference
+            );
+        }
+
+        return $this->getCustomerOrderTransfer(
+            $orderReference,
+            $customerTransfer->getCustomerReferenceOrFail()
+        );
+    }
+
+    /**
+     * @param string $orderReference
+     * @param string $customerReference
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @return \Generated\Shared\Transfer\OrderTransfer
+     */
+    protected function getCustomerOrderTransfer(
+        string $orderReference,
+        string $customerReference
     ): OrderTransfer {
         $orderTransfer = (new OrderTransfer())
             ->setOrderReference($orderReference)
             ->setCustomerReference($customerReference);
 
-        return $salesClient->getCustomerOrderByOrderReference($orderTransfer);
+        $orderTransfer = $this->getFactory()->getSalesClient()
+            ->getCustomerOrderByOrderReference($orderTransfer);
+
+        if (!$orderTransfer->getIdSalesOrder()) {
+            throw new NotFoundHttpException();
+        }
+
+        return $orderTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param string $orderReference
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @return \Generated\Shared\Transfer\OrderTransfer
+     */
+    protected function getGuestOrderTransfer(
+        QuoteTransfer $quoteTransfer,
+        string $orderReference
+    ): OrderTransfer {
+        if ($quoteTransfer->getOrderReference() !== $orderReference) {
+            throw new NotFoundHttpException();
+        }
+
+        $orderFilterTransfer = (new OrderFilterTransfer())
+            ->setOrderReference($orderReference);
+
+        $orderTransfer = $this->getClient()->getGuestOrder($orderFilterTransfer);
+
+        if (!$orderTransfer->getIdSalesOrder()) {
+            throw new NotFoundHttpException();
+        }
+
+        return $orderTransfer;
     }
 }

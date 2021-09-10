@@ -23,6 +23,14 @@ class PaymentExternalToCartClientBridge implements PaymentExternalToCartClientIn
     }
 
     /**
+     * @return \Generated\Shared\Transfer\QuoteTransfer
+     */
+    public function getQuote()
+    {
+        return $this->cartClient->getQuote();
+    }
+
+    /**
      * @return void
      */
     public function clearQuote()

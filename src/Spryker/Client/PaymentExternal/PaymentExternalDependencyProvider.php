@@ -10,6 +10,7 @@ namespace Spryker\Client\PaymentExternal;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
+use Spryker\Client\PaymentExternal\Dependency\Client\PaymentExternalToZedRequestClientBridge;
 use Spryker\Client\PaymentExternal\Dependency\External\PaymentExternalToGuzzleHttpClientAdapter;
 use Spryker\Client\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncodingServiceBridge;
 
@@ -17,6 +18,7 @@ class PaymentExternalDependencyProvider extends AbstractDependencyProvider
 {
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
     public const CLIENT_HTTP = 'CLIENT_HTTP';
+    public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container
@@ -27,6 +29,7 @@ class PaymentExternalDependencyProvider extends AbstractDependencyProvider
     {
         $container = $this->addUtilEncodingService($container);
         $container = $this->addHttpClient($container);
+        $container = $this->addZedRequestClient($container);
 
         return $container;
     }
@@ -55,6 +58,22 @@ class PaymentExternalDependencyProvider extends AbstractDependencyProvider
         $container->set(static::CLIENT_HTTP, function () {
             return new PaymentExternalToGuzzleHttpClientAdapter(
                 new GuzzleHttpClient()
+            );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Client\Kernel\Container $container
+     *
+     * @return \Spryker\Client\Kernel\Container
+     */
+    protected function addZedRequestClient(Container $container): Container
+    {
+        $container->set(static::CLIENT_ZED_REQUEST, function (Container $container) {
+            return new PaymentExternalToZedRequestClientBridge(
+                $container->getLocator()->zedRequest()->client()
             );
         });
 

@@ -7,8 +7,6 @@
 
 namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 
-use Generated\Shared\Transfer\OrderCancelRequestTransfer;
-use Generated\Shared\Transfer\OrderCancelResponseTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 
 class PaymentExternalToSalesClientBridge implements PaymentExternalToSalesClientInterface
@@ -34,15 +32,5 @@ class PaymentExternalToSalesClientBridge implements PaymentExternalToSalesClient
     public function getCustomerOrderByOrderReference(OrderTransfer $orderTransfer): OrderTransfer
     {
         return $this->salesClient->getCustomerOrderByOrderReference($orderTransfer);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\OrderCancelRequestTransfer $orderCancelRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\OrderCancelResponseTransfer
-     */
-    public function cancelOrder(OrderCancelRequestTransfer $orderCancelRequestTransfer): OrderCancelResponseTransfer
-    {
-        return $this->salesClient->cancelOrder($orderCancelRequestTransfer);
     }
 }

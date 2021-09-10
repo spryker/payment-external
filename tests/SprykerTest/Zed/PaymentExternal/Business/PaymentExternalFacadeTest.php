@@ -11,6 +11,8 @@ use Codeception\Test\Unit;
 use Generated\Shared\DataBuilder\CheckoutResponseBuilder;
 use Generated\Shared\DataBuilder\QuoteBuilder;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\OrderFilterTransfer;
+use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenRequestTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenResponseTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
@@ -205,6 +207,64 @@ class PaymentExternalFacadeTest extends Unit
 
         $this->assertEquals($initialQuoteTransfer->toArray(), $quoteTransfer->toArray());
         $this->assertEquals($initialCheckoutResponseTransfer->toArray(), $checkoutResponseTransfer->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetGuestOrderReturnsFoundOrderTransferWithCorrectData(): void
+    {
+        // Arrange
+        $orderEntity = $this->tester->haveGuestOrderEntity();
+
+        $orderFilterTransfer = $this->tester->getOrderFilterTransfer([
+            OrderFilterTransfer::ORDER_REFERENCE => $orderEntity->getOrderReference(),
+        ]);
+
+        // Act
+        $foundOrderTransfer = $this->tester->getFacade()->getGuestOrder($orderFilterTransfer);
+
+        // Assert
+        $this->assertInstanceOf(OrderTransfer::class, $foundOrderTransfer);
+        $this->assertEquals($orderEntity->getIdSalesOrder(), $foundOrderTransfer->getIdSalesOrder());
+        $this->assertEquals($orderEntity->getOrderReference(), $foundOrderTransfer->getOrderReference());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetGuestOrderReturnsEmptyTransferWithNonEmptyCustomerReference(): void
+    {
+        // Arrange
+        $orderEntity = $this->tester->haveSalesOrderEntity();
+        $orderFilterTransfer = $this->tester->getOrderFilterTransfer([
+            OrderFilterTransfer::ORDER_REFERENCE => $orderEntity->getOrderReference(),
+        ]);
+
+        // Act
+        $foundOrderTransfer = $this->tester->getFacade()->getGuestOrder($orderFilterTransfer);
+
+        // Assert
+        $this->assertInstanceOf(OrderTransfer::class, $foundOrderTransfer);
+        $this->assertNull($foundOrderTransfer->getIdSalesOrder());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetGuestOrderReturnsEmptyTransferWithIncorrectOrderReference(): void
+    {
+        // Arrange
+        $orderFilterTransfer = $this->tester->getOrderFilterTransfer([
+            OrderFilterTransfer::ORDER_REFERENCE => 'wrong order reference',
+        ]);
+
+        // Act
+        $foundOrderTransfer = $this->tester->getFacade()->getGuestOrder($orderFilterTransfer);
+
+        // Assert
+        $this->assertInstanceOf(OrderTransfer::class, $foundOrderTransfer);
+        $this->assertNull($foundOrderTransfer->getIdSalesOrder());
     }
 
     /**

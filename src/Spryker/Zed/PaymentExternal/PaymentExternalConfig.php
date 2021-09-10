@@ -15,7 +15,6 @@ use Generated\Shared\Transfer\LocaleTransfer;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
-use Generated\Shared\Transfer\TotalsTransfer;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class PaymentExternalConfig extends AbstractBundleConfig
@@ -99,8 +98,8 @@ class PaymentExternalConfig extends AbstractBundleConfig
             QuoteTransfer::CURRENCY => [
                 CurrencyTransfer::CODE => 'currencyCode',
             ],
-            QuoteTransfer::TOTALS => [
-                TotalsTransfer::GRAND_TOTAL => 'grandTotal',
+            QuoteTransfer::PAYMENT => [
+                PaymentTransfer::AMOUNT => 'grandTotal',
             ],
             QuoteTransfer::ITEMS => [
                 ItemTransfer::ID_SALES_ORDER_ITEM => 'idSalesOrderItem',
