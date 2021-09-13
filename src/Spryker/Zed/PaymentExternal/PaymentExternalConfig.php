@@ -100,13 +100,11 @@ class PaymentExternalConfig extends AbstractBundleConfig
             ],
             QuoteTransfer::PAYMENT => [
                 PaymentTransfer::AMOUNT => 'grandTotal',
+                PaymentTransfer::PAYMENT_METHOD => 'paymentMethod',
             ],
             QuoteTransfer::ITEMS => [
                 ItemTransfer::ID_SALES_ORDER_ITEM => 'idSalesOrderItem',
                 ItemTransfer::NAME => 'name',
-            ],
-            QuoteTransfer::PAYMENT => [
-                PaymentTransfer::PAYMENT_METHOD => 'paymentMethod',
             ],
         ];
     }
