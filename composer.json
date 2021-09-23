@@ -26,7 +26,6 @@
     "require-dev": {
         "spryker/code-sniffer": "*",
         "spryker/event": "*",
-        "spryker/oms": "*",
         "spryker/propel": "*",
         "spryker/router": "*",
         "spryker/testify": "*"
