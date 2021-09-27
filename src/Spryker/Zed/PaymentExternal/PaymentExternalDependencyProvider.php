@@ -20,14 +20,34 @@ use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServ
  */
 class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
 {
+    /**
+     * @var string
+     */
     public const CLIENT_PAYMENT_EXTERNAL = 'CLIENT_PAYMENT_EXTERNAL';
 
+    /**
+     * @var string
+     */
     public const FACADE_LOCALE = 'FACADE_LOCALE';
+
+    /**
+     * @var string
+     */
     public const FACADE_PAYMENT = 'FACADE_PAYMENT';
+
+    /**
+     * @var string
+     */
     public const FACADE_SALES = 'FACADE_SALES';
 
+    /**
+     * @var string
+     */
     public const SERVICE_UTIL_TEXT = 'SERVICE_UTIL_TEXT';
 
+    /**
+     * @var string
+     */
     public const PROPEL_QUERY_PAYMENT_METHOD = 'PROPEL_QUERY_PAYMENT_METHOD';
 
     /**

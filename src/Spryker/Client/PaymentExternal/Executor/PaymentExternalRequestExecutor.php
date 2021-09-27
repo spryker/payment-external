@@ -18,6 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentExternalRequestExecutor implements PaymentExternalRequestExecutorInterface
 {
+    /**
+     * @var string
+     */
     protected const MESSAGE_ERROR_TOKEN_GENERATION = 'Something went wrong with your payment.';
 
     /**

@@ -25,6 +25,9 @@ use Spryker\Zed\PaymentExternal\PaymentExternalConfig;
 
 class OrderPostSaveHook implements OrderPostSaveHookInterface
 {
+    /**
+     * @var string
+     */
     protected const ERROR_CODE_PAYMENT_FAILED = 'payment failed';
 
     /**

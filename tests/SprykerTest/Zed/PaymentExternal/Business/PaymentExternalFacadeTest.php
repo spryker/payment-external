@@ -37,8 +37,19 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
  */
 class PaymentExternalFacadeTest extends Unit
 {
+    /**
+     * @var string
+     */
     protected const TOKEN = 'token-value';
+
+    /**
+     * @var string
+     */
     protected const CHECKOUT_ORDER_TOKEN_URL = 'checkout-order-token-url';
+
+    /**
+     * @var string
+     */
     protected const CHECKOUT_REDIRECT_URL = 'checkout-redirect-url';
 
     /**

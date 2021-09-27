@@ -21,6 +21,8 @@ class PaymentExternalConfig extends AbstractBundleConfig
 {
     /**
      * @uses \Spryker\Shared\Application\ApplicationConstants::BASE_URL_YVES
+     *
+     * @var string
      */
     protected const BASE_URL_YVES = 'APPLICATION:BASE_URL_YVES';
 

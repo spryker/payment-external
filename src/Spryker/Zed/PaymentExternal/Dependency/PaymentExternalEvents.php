@@ -14,6 +14,8 @@ interface PaymentExternalEvents
      * - Represents creation of PBC payment method.
      *
      * @api
+     *
+     * @var string
      */
     public const PBC_PAYMENT_METHOD_ADDED = 'PaymentMethod.Added';
 
@@ -22,6 +24,8 @@ interface PaymentExternalEvents
      * - Represents deletion of PBC payment method.
      *
      * @api
+     *
+     * @var string
      */
     public const PBC_PAYMENT_METHOD_DELETED = 'PaymentMethod.Deleted';
 }
