@@ -88,14 +88,14 @@ class PaymentExternalConfig extends AbstractBundleConfig
                 StoreTransfer::NAME => 'storeName',
             ],
             QuoteTransfer::CUSTOMER => [
-                CustomerTransfer::FIRST_NAME => 'customerFirstName',
-                CustomerTransfer::LAST_NAME => 'customerLastName',
                 CustomerTransfer::LOCALE => [
                     LocaleTransfer::LOCALE_NAME => 'localeName',
                 ],
             ],
             QuoteTransfer::BILLING_ADDRESS => [
                 AddressTransfer::ISO2_CODE => 'countryCode',
+                AddressTransfer::FIRST_NAME => 'customerFirstName',
+                AddressTransfer::LAST_NAME => 'customerLastName',
             ],
             QuoteTransfer::CURRENCY => [
                 CurrencyTransfer::CODE => 'currencyCode',

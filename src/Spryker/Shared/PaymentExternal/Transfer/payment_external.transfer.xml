@@ -3,6 +3,8 @@
 
     <transfer name="Address">
         <property name="iso2Code" type="string"/>
+        <property name="firstName" type="string"/>
+        <property name="lastName" type="string"/>
     </transfer>
 
     <transfer name="CheckoutError">
@@ -20,8 +22,6 @@
 
     <transfer name="Customer">
         <property name="customerReference" type="string"/>
-        <property name="firstName" type="string"/>
-        <property name="lastName" type="string"/>
         <property name="locale" type="Locale"/>
     </transfer>
 
@@ -66,6 +66,7 @@
         <property name="paymentSelection" type="string"/>
         <property name="amount" type="int"/>
         <property name="externalPayments" type="array" associative="true" singular="externalPayment"/>
+        <property name="paymentMethod" type="string"/>
     </transfer>
 
     <transfer name="PaymentExternalTokenResponse">
