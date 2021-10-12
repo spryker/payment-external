@@ -16,8 +16,19 @@ use Spryker\Client\PaymentExternal\Dependency\Service\PaymentExternalToUtilEncod
 
 class PaymentExternalDependencyProvider extends AbstractDependencyProvider
 {
+    /**
+     * @var string
+     */
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
+    
+    /**
+     * @var string
+     */
     public const CLIENT_HTTP = 'CLIENT_HTTP';
+    
+    /**
+     * @var string
+     */
     public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
 
     /**
