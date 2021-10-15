@@ -19,12 +19,12 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      * @var string
      */
     public const CLIENT_CUSTOMER = 'CLIENT_CUSTOMER';
-    
+
     /**
      * @var string
      */
     public const CLIENT_SALES = 'CLIENT_SALES';
-    
+
     /**
      * @var string
      */

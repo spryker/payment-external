@@ -29,7 +29,7 @@ class OrderCancelController extends AbstractController
      * @var string
      */
     protected const GLOSSARY_KEY_ORDER_CANCELLED = 'payment_external.order.cancelled';
-    
+
     /**
      * @var string
      */

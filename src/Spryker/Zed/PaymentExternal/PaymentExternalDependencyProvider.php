@@ -29,12 +29,12 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      * @var string
      */
     public const FACADE_LOCALE = 'FACADE_LOCALE';
-    
+
     /**
      * @var string
      */
     public const FACADE_PAYMENT = 'FACADE_PAYMENT';
-    
+
     /**
      * @var string
      */

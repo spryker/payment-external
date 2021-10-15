@@ -16,7 +16,7 @@ class PaymentExternalRouteProviderPlugin extends AbstractRouteProviderPlugin
      * @var string
      */
     public const ROUTE_NAME_PAYMENT_ORDER_CANCEL = 'payment-order-cancel';
-    
+
     /**
      * @var string
      */
