@@ -29,7 +29,7 @@ class OrderSuccessController extends AbstractController
         $this->getFactory()->getCartClient()->clearQuote();
 
         return $this->view([
-            'quoteTransfer' => $quoteTransfer,
+            'quote' => $quoteTransfer,
         ], [], '@PaymentExternal/views/order-success/index.twig');
     }
 }

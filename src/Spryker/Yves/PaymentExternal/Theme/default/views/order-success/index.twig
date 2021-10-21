@@ -1,9 +1,9 @@
-{# @var quoteTransfer \Generated\Shared\Transfer\QuoteTransfer #}
+{# @var quote \Generated\Shared\Transfer\QuoteTransfer #}
 
 {% extends template('page-layout-order-confirmation', 'PaymentExternal') %}
 
 {% define data = {
     title: 'payment_external.thank_you' | trans,
     message: 'payment_external.success.order.placement.message' | trans,
-    quoteTransfer: _view.quoteTransfer
+    quote: _view.quote
 } %}
