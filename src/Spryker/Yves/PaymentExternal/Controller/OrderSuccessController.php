@@ -23,13 +23,13 @@ class OrderSuccessController extends AbstractController
      */
     public function indexAction(Request $request): View
     {
-        $quotaTransfer = $this->getFactory()->getCartClient()->getQuote();
+        $quoteTransfer = $this->getFactory()->getCartClient()->getQuote();
 
         $this->getFactory()->getCustomerClient()->markCustomerAsDirty();
         $this->getFactory()->getCartClient()->clearQuote();
 
         return $this->view([
-            'quoteTransfer' => $quotaTransfer,
+            'quoteTransfer' => $quoteTransfer,
         ], [], '@PaymentExternal/views/order-success/index.twig');
     }
 }
