@@ -12,7 +12,7 @@ use Generated\Shared\Transfer\OrderTransfer;
 class PaymentExternalToSalesClientBridge implements PaymentExternalToSalesClientInterface
 {
     /**
-     * @var \Spryker\Client\Sales\SalesClientInterface $salesClient
+     * @var \Spryker\Client\Sales\SalesClientInterface
      */
     protected $salesClient;
 

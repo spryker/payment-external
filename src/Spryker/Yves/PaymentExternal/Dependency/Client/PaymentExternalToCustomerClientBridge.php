@@ -10,7 +10,7 @@ namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 class PaymentExternalToCustomerClientBridge implements PaymentExternalToCustomerClientInterface
 {
     /**
-     * @var \Spryker\Client\Customer\CustomerClientInterface $customerClient
+     * @var \Spryker\Client\Customer\CustomerClientInterface
      */
     protected $customerClient;
 

@@ -137,6 +137,7 @@
         <property name="payment" type="Payment"/>
         <property name="store" type="Store"/>
         <property name="billingAddress" type="Address"/>
+        <property name="items" type="Item[]" singular="item"/>
     </transfer>
 
     <transfer name="SaveOrder">

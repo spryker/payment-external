@@ -10,7 +10,7 @@ namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 class PaymentExternalToCartClientBridge implements PaymentExternalToCartClientInterface
 {
     /**
-     * @var \Spryker\Client\Cart\CartClientInterface $cartClient
+     * @var \Spryker\Client\Cart\CartClientInterface
      */
     protected $cartClient;
 
