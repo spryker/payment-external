@@ -25,7 +25,7 @@ class PaymentExternalFactory extends AbstractFactory
     {
         return new PaymentExternalRequestExecutor(
             $this->getUtilEncodingService(),
-            $this->getHttpClient()
+            $this->getHttpClient(),
         );
     }
 

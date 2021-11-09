@@ -14,7 +14,7 @@ interface PaymentExternalToHttpClientAdapterInterface
     /**
      * @param string $method
      * @param string $uri
-     * @param mixed[] $options
+     * @param array<mixed> $options
      *
      * @throws \Spryker\Client\PaymentExternal\Http\Exception\PaymentExternalHttpRequestException
      *

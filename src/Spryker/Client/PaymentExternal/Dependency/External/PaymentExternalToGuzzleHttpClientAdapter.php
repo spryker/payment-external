@@ -30,7 +30,7 @@ class PaymentExternalToGuzzleHttpClientAdapter implements PaymentExternalToHttpC
     /**
      * @param string $method
      * @param string $uri
-     * @param mixed[] $options
+     * @param array<mixed> $options
      *
      * @throws \Spryker\Client\PaymentExternal\Http\Exception\PaymentExternalHttpRequestException
      *
@@ -44,7 +44,7 @@ class PaymentExternalToGuzzleHttpClientAdapter implements PaymentExternalToHttpC
             throw new PaymentExternalHttpRequestException(
                 $exception->getMessage(),
                 $exception->getCode(),
-                $exception
+                $exception,
             );
         }
     }

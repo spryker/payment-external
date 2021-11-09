@@ -101,7 +101,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_LOCALE, function (Container $container) {
             return new PaymentExternalToLocaleFacadeBridge(
-                $container->getLocator()->locale()->facade()
+                $container->getLocator()->locale()->facade(),
             );
         });
 
@@ -117,7 +117,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_PAYMENT, function (Container $container) {
             return new PaymentExternalToPaymentFacadeBridge(
-                $container->getLocator()->payment()->facade()
+                $container->getLocator()->payment()->facade(),
             );
         });
 
@@ -133,7 +133,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_SALES, function (Container $container) {
             return new PaymentExternalToSalesFacadeBridge(
-                $container->getLocator()->sales()->facade()
+                $container->getLocator()->sales()->facade(),
             );
         });
 

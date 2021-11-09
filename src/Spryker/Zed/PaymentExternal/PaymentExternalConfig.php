@@ -80,7 +80,7 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *     ],
      * ]
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function getQuoteFieldsAllowedForSending(): array
     {

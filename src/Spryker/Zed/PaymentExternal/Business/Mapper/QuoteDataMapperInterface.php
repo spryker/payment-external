@@ -13,9 +13,9 @@ interface QuoteDataMapperInterface
 {
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     * @param mixed[] $quoteFieldsAllowedForSending
+     * @param array<mixed> $quoteFieldsAllowedForSending
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function mapQuoteDataByAllowedFields(
         QuoteTransfer $quoteTransfer,

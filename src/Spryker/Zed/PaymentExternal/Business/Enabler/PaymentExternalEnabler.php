@@ -50,7 +50,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
-            $paymentMethodTransfer->getLabelNameOrFail()
+            $paymentMethodTransfer->getLabelNameOrFail(),
         );
 
         $paymentProviderTransfer = $this->findOrCreatePaymentProvider($paymentMethodTransfer->getGroupNameOrFail());

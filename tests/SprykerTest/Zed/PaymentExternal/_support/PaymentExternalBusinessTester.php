@@ -38,7 +38,7 @@ class PaymentExternalBusinessTester extends Actor
     use _generated\PaymentExternalBusinessTesterActions;
 
     /**
-     * @param mixed[] $seedData
+     * @param array<mixed> $seedData
      *
      * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
@@ -48,7 +48,7 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
-     * @param mixed[] $seedData
+     * @param array<mixed> $seedData
      *
      * @return \Generated\Shared\Transfer\PaymentProviderTransfer
      */
@@ -58,7 +58,7 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
-     * @param mixed[] $seedData
+     * @param array<mixed> $seedData
      *
      * @return \Generated\Shared\Transfer\OrderFilterTransfer
      */

@@ -94,7 +94,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
 
         $paymentMethodKey = $this->getPaymentMethodKey($quoteTransfer->getPaymentOrFail());
         $paymentMethodTransfer = $this->paymentFacade->findPaymentMethod(
-            (new PaymentMethodTransfer())->setPaymentMethodKey($paymentMethodKey)
+            (new PaymentMethodTransfer())->setPaymentMethodKey($paymentMethodKey),
         );
 
         if (!$paymentMethodTransfer) {
@@ -104,13 +104,13 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
         $paymentExternalTokenResponseTransfer = $this->requestPaymentExternalToken(
             $paymentMethodTransfer,
             $quoteTransfer,
-            $checkoutResponseTransfer->getSaveOrderOrFail()
+            $checkoutResponseTransfer->getSaveOrderOrFail(),
         );
 
         $this->processPaymentExternalTokenResponse(
             $paymentExternalTokenResponseTransfer,
             $checkoutResponseTransfer,
-            $paymentMethodTransfer
+            $paymentMethodTransfer,
         );
     }
 
@@ -175,16 +175,16 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
         $postData = [
             'orderData' => $this->quoteDataMapper->mapQuoteDataByAllowedFields(
                 $quoteTransfer,
-                $this->paymentExternalConfig->getQuoteFieldsAllowedForSending()
+                $this->paymentExternalConfig->getQuoteFieldsAllowedForSending(),
             ),
             'redirectSuccessUrl' => $this->generatePaymentRedirectUrl(
                 $language,
-                $this->paymentExternalConfig->getSuccessRoute()
+                $this->paymentExternalConfig->getSuccessRoute(),
             ),
             'redirectCancelUrl' => $this->generatePaymentRedirectUrl(
                 $language,
                 $this->paymentExternalConfig->getCancelRoute(),
-                ['orderReference' => $quoteTransfer->getOrderReference()]
+                ['orderReference' => $quoteTransfer->getOrderReference()],
             ),
             'tenantUuid' => $this->paymentExternalConfig->getTenantUuid(),
         ];
@@ -199,7 +199,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     /**
      * @param string $language
      * @param string $urlPath
-     * @param mixed[] $queryParts
+     * @param array<mixed> $queryParts
      *
      * @return string
      */
@@ -209,7 +209,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
             '%s/%s%s',
             $this->paymentExternalConfig->getBaseUrlYves(),
             $language,
-            $urlPath
+            $urlPath,
         );
 
         return Url::generate($url, $queryParts)->build();
@@ -251,7 +251,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
 
         $redirectUrl = Url::generate(
             $paymentMethodTransfer->getCheckoutRedirectUrlOrFail(),
-            ['token' => $paymentExternalTokenResponseTransfer->getToken()]
+            ['token' => $paymentExternalTokenResponseTransfer->getToken()],
         )->build();
 
         $checkoutResponseTransfer

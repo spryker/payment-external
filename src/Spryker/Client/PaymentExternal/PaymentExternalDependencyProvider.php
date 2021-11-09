@@ -68,7 +68,7 @@ class PaymentExternalDependencyProvider extends AbstractDependencyProvider
     {
         $container->set(static::CLIENT_HTTP, function () {
             return new PaymentExternalToGuzzleHttpClientAdapter(
-                new GuzzleHttpClient()
+                new GuzzleHttpClient(),
             );
         });
 
@@ -84,7 +84,7 @@ class PaymentExternalDependencyProvider extends AbstractDependencyProvider
     {
         $container->set(static::CLIENT_ZED_REQUEST, function (Container $container) {
             return new PaymentExternalToZedRequestClientBridge(
-                $container->getLocator()->zedRequest()->client()
+                $container->getLocator()->zedRequest()->client(),
             );
         });
 

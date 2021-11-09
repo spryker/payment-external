@@ -59,7 +59,7 @@ class PaymentExternalRequestExecutor implements PaymentExternalRequestExecutorIn
                 $paymentExternalTokenRequestTransfer->getRequestUrlOrFail(),
                 [
                     RequestOptions::FORM_PARAMS => $paymentExternalTokenRequestTransfer->getPostData(),
-                ]
+                ],
             );
         } catch (PaymentExternalHttpRequestException $e) {
             return (new PaymentExternalTokenResponseTransfer())

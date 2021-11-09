@@ -51,7 +51,7 @@ class OrderCancelController extends AbstractController
         $orderTransfer = $this->getOrderTransfer(
             $cartClient,
             $orderReference,
-            $customerTransfer
+            $customerTransfer,
         );
 
         $orderCancelRequestTransfer = (new OrderCancelRequestTransfer())
@@ -118,13 +118,13 @@ class OrderCancelController extends AbstractController
         if (!$customerTransfer) {
             return $this->getGuestOrderTransfer(
                 $cartClient->getQuote(),
-                $orderReference
+                $orderReference,
             );
         }
 
         return $this->getCustomerOrderTransfer(
             $orderReference,
-            $customerTransfer->getCustomerReferenceOrFail()
+            $customerTransfer->getCustomerReferenceOrFail(),
         );
     }
 

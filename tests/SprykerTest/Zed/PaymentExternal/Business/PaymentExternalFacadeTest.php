@@ -170,7 +170,7 @@ class PaymentExternalFacadeTest extends Unit
         ]);
 
         $paymentTransfer = (new PaymentTransfer())->setPaymentSelection(
-            sprintf('%s[%s]', PaymentTransfer::EXTERNAL_PAYMENTS, $paymentMethodTransfer->getPaymentMethodKey())
+            sprintf('%s[%s]', PaymentTransfer::EXTERNAL_PAYMENTS, $paymentMethodTransfer->getPaymentMethodKey()),
         );
 
         $quoteTransfer = $this->buildQuoteTransfer();
@@ -186,7 +186,7 @@ class PaymentExternalFacadeTest extends Unit
             ->willReturn(
                 (new PaymentExternalTokenResponseTransfer())
                     ->setIsSuccessful(true)
-                    ->setToken(static::TOKEN)
+                    ->setToken(static::TOKEN),
             );
 
         $this->tester->getFacade()->executeOrderPostSaveHook($quoteTransfer, $checkoutResponseTransfer);
@@ -208,7 +208,7 @@ class PaymentExternalFacadeTest extends Unit
 
         $initialQuoteTransfer = $this->buildQuoteTransfer();
         $initialQuoteTransfer->setPayment(
-            (new PaymentTransfer())->setPaymentSelection($paymentMethodTransfer->getPaymentMethodKey())
+            (new PaymentTransfer())->setPaymentSelection($paymentMethodTransfer->getPaymentMethodKey()),
         );
         $initialCheckoutResponseTransfer = $this->buildCheckoutResponseTransfer();
 

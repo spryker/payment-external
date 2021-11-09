@@ -44,7 +44,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     {
         return new PaymentExternalEnabler(
             $this->getPaymentFacade(),
-            $this->createPaymentMethodKeyGenerator()
+            $this->createPaymentMethodKeyGenerator(),
         );
     }
 
@@ -55,7 +55,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     {
         return new PaymentExternalDisabler(
             $this->getEntityManager(),
-            $this->createPaymentMethodKeyGenerator()
+            $this->createPaymentMethodKeyGenerator(),
         );
     }
 
@@ -101,7 +101,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
             $this->getLocaleFacade(),
             $this->getPaymentFacade(),
             $this->getPaymentExternalClient(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 

@@ -15,9 +15,9 @@ class QuoteDataMapper implements QuoteDataMapperInterface
 {
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     * @param mixed[] $quoteFieldsAllowedForSending
+     * @param array<mixed> $quoteFieldsAllowedForSending
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function mapQuoteDataByAllowedFields(
         QuoteTransfer $quoteTransfer,
@@ -26,16 +26,16 @@ class QuoteDataMapper implements QuoteDataMapperInterface
         return $this->mapTransferDataByAllowedFieldsRecursive(
             $quoteTransfer,
             $quoteFieldsAllowedForSending,
-            []
+            [],
         );
     }
 
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $transfer
-     * @param mixed[] $allowedFields
-     * @param mixed[] $mappedData
+     * @param array<mixed> $allowedFields
+     * @param array<mixed> $mappedData
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     protected function mapTransferDataByAllowedFieldsRecursive(
         AbstractTransfer $transfer,

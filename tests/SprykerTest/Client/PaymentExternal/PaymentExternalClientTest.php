@@ -94,7 +94,7 @@ class PaymentExternalClientTest extends Test
 
         $this->tester->setDependency(
             PaymentExternalDependencyProvider::CLIENT_HTTP,
-            $httpClientMock
+            $httpClientMock,
         );
 
         return $httpClientMock;
