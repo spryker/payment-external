@@ -51,6 +51,16 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *
      * @return string
      */
+    public function getCheckoutSummaryPageRoute(): string
+    {
+        return '/checkout/summary';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
     public function getBaseUrlYves(): string
     {
         return $this->get(static::BASE_URL_YVES);
