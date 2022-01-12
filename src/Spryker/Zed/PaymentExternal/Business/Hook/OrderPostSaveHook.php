@@ -186,7 +186,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $this->paymentExternalConfig->getCancelRoute(),
                 ['orderReference' => $quoteTransfer->getOrderReference()],
             ),
-            'tenantUuid' => $this->paymentExternalConfig->getTenantUuid(),
+            'tenantIdentifier' => $this->paymentExternalConfig->gettenantIdentifier(),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())
