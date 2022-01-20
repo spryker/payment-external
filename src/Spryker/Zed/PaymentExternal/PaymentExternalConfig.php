@@ -71,11 +71,11 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getTenantUuid(): string
+    public function getTenantIdentifier(): string
     {
-        $beHostInsteadOfTenantUuid = getenv('SPRYKER_BE_HOST') !== false ? getenv('SPRYKER_BE_HOST') : 'TENANT_UUID_UNDEFINED';
+        $beHostInsteadOfTenantIdentifier = getenv('SPRYKER_BE_HOST') !== false ? getenv('SPRYKER_BE_HOST') : 'TENANT_IDENTIFIER_UNDEFINED';
 
-        return getenv('TENANT_UUID') !== false ? getenv('TENANT_UUID') : $beHostInsteadOfTenantUuid;
+        return getenv('TENANT_IDENTIFIER') !== false ? getenv('TENANT_IDENTIFIER') : $beHostInsteadOfTenantIdentifier;
     }
 
     /**
