@@ -28,6 +28,7 @@ interface PaymentExternalFacadeInterface
      * - Creates payment provider if respective provider doesn't exist in DB
      * - Creates payment method if the payment method with provided key doesn't exist in DB.
      * - Updates payment method otherwise.
+     * - Sets payment method `is_active` flag to false if it's already exist.
      * - Returns PaymentMethod transfer filled with payment method data.
      *
      * @api
