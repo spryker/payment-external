@@ -7,6 +7,8 @@
 
 namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 
+use Generated\Shared\Transfer\QuoteTransfer;
+
 class PaymentExternalToCartClientBridge implements PaymentExternalToCartClientInterface
 {
     /**
@@ -25,7 +27,7 @@ class PaymentExternalToCartClientBridge implements PaymentExternalToCartClientIn
     /**
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
-    public function getQuote()
+    public function getQuote(): QuoteTransfer
     {
         return $this->cartClient->getQuote();
     }
@@ -33,7 +35,7 @@ class PaymentExternalToCartClientBridge implements PaymentExternalToCartClientIn
     /**
      * @return void
      */
-    public function clearQuote()
+    public function clearQuote(): void
     {
         $this->cartClient->clearQuote();
     }
