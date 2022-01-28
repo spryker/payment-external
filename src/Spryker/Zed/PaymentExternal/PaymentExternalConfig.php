@@ -51,6 +51,16 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *
      * @return string
      */
+    public function getCheckoutSummaryPageRoute(): string
+    {
+        return '/checkout/summary';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
     public function getBaseUrlYves(): string
     {
         return $this->get(static::BASE_URL_YVES);
@@ -61,11 +71,11 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getTenantUuid(): string
+    public function getTenantIdentifier(): string
     {
-        $beHostInsteadOfTenantUuid = getenv('SPRYKER_BE_HOST') !== false ? getenv('SPRYKER_BE_HOST') : 'TENANT_UUID_UNDEFINED';
+        $beHostInsteadOfTenantIdentifier = getenv('SPRYKER_BE_HOST') !== false ? getenv('SPRYKER_BE_HOST') : 'TENANT_IDENTIFIER_UNDEFINED';
 
-        return getenv('TENANT_UUID') !== false ? getenv('TENANT_UUID') : $beHostInsteadOfTenantUuid;
+        return getenv('TENANT_IDENTIFIER') !== false ? getenv('TENANT_IDENTIFIER') : $beHostInsteadOfTenantIdentifier;
     }
 
     /**
