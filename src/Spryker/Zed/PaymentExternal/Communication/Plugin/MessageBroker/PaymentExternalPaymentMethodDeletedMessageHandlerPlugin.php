@@ -23,7 +23,7 @@ class PaymentExternalPaymentMethodDeletedMessageHandlerPlugin extends AbstractPl
      */
     public function onPaymentMethodDeleted(\Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer): void
     {
-        $this->getFacade()->handlePaymentMethodDeleted($paymentMethodDeletedTransfer);
+        $this->getFacade()->disableExternalPaymentMethod($paymentMethodDeletedTransfer);
     }
 
     /**

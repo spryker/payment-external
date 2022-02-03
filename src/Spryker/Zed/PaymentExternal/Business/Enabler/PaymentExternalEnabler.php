@@ -7,10 +7,13 @@
 
 namespace Spryker\Zed\PaymentExternal\Business\Enabler;
 
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
+use Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
+
 
 class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 {
@@ -25,24 +28,37 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
     protected $paymentMethodKeyGenerator;
 
     /**
+     * @var \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface
+     */
+    private PaymentMethodEventMapperInterface $paymentMethodEventMapper;
+
+    /**
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
      */
     public function __construct(
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
-        PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
+        PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator,
+        PaymentMethodEventMapperInterface $paymentMethodEventMapper
     ) {
         $this->paymentFacade = $paymentFacade;
         $this->paymentMethodKeyGenerator = $paymentMethodKeyGenerator;
+        $this->paymentMethodEventMapper = $paymentMethodEventMapper;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer
      *
      * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
-    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
+    public function enableExternalPaymentMethod(PaymentMethodAddedTransfer $paymentMethodAddedTransfer): PaymentMethodTransfer
     {
+
+        $paymentMethodTransfer = $this->paymentMethodEventMapper->mapPaymentMethodAddedTransferToPaymentMethodTransfer(
+            $paymentMethodAddedTransfer,
+            new PaymentMethodTransfer()
+        );
+
         $paymentMethodTransfer->requireLabelName()
             ->requireGroupName()
             ->requireCheckoutOrderTokenUrl()

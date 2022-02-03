@@ -23,7 +23,7 @@ class PaymentExternalPaymentMethodAddedMessageHandlerPlugin extends AbstractPlug
      */
     public function onPaymentMethodAdded(\Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer): void
     {
-        $this->getFacade()->handlePaymentMethodAdded($paymentMethodAddedTransfer);
+        $this->getFacade()->enableExternalPaymentMethod($paymentMethodAddedTransfer);
     }
 
     /**

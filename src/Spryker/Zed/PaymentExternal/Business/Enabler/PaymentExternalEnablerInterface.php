@@ -7,14 +7,15 @@
 
 namespace Spryker\Zed\PaymentExternal\Business\Enabler;
 
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 
 interface PaymentExternalEnablerInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer
      *
-     * @return \Generated\Shared\Transfer\PaymentMethodTransfer
+     * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
      */
-    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer;
+    public function enableExternalPaymentMethod(PaymentMethodAddedTransfer $paymentMethodAddedTransfer): PaymentMethodTransfer;
 }

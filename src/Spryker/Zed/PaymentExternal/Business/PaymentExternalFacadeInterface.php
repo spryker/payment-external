@@ -12,6 +12,8 @@ use Generated\Shared\Transfer\OrderCancelRequestTransfer;
 use Generated\Shared\Transfer\OrderCancelResponseTransfer;
 use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
+use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\QueryCriteriaTransfer;
@@ -32,11 +34,11 @@ interface PaymentExternalFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer
      *
-     * @return \Generated\Shared\Transfer\PaymentMethodTransfer
+     * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
      */
-    public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer;
+    public function enableExternalPaymentMethod(PaymentMethodAddedTransfer $paymentMethodAddedTransfer): PaymentMethodTransfer;
 
     /**
      * Specification:
@@ -47,11 +49,11 @@ interface PaymentExternalFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer
      *
      * @return void
      */
-    public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void;
+    public function disableExternalPaymentMethod(PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer): void;
 
     /**
      * Specification:
