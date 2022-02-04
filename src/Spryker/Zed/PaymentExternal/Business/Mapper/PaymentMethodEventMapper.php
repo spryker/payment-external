@@ -16,8 +16,9 @@ class PaymentMethodEventMapper implements PaymentMethodEventMapperInterface
         PaymentMethodTransfer $paymentMethodTransfer
     ): PaymentMethodTransfer
     {
-        $paymentMethodTransfer->setName($paymentMethodAddedTransfer->getName())
-            ->setPaymentProvider((new PaymentProviderTransfer())->setName($paymentMethodAddedTransfer->getProviderName()))
+        $paymentMethodTransfer
+            ->setLabelName($paymentMethodAddedTransfer->getName())
+            ->setGroupName($paymentMethodAddedTransfer->getProviderName())
             ->setCheckoutOrderTokenUrl($paymentMethodAddedTransfer->getCheckoutOrderTokenUrl())
             ->setCheckoutRedirectUrl($paymentMethodAddedTransfer->getCheckoutRedirectUrl());
 
@@ -29,10 +30,9 @@ class PaymentMethodEventMapper implements PaymentMethodEventMapperInterface
         PaymentMethodTransfer $paymentMethodTransfer
     ): PaymentMethodTransfer
     {
-        $paymentMethodTransfer->setName($paymentMethodDeletedTransfer->getName())
-            ->setPaymentProvider((new PaymentProviderTransfer())->setName($paymentMethodDeletedTransfer->getProviderName()))
-            ->setCheckoutOrderTokenUrl($paymentMethodDeletedTransfer->getCheckoutOrderTokenUrl())
-            ->setCheckoutRedirectUrl($paymentMethodDeletedTransfer->getCheckoutRedirectUrl());
+        $paymentMethodTransfer
+            ->setLabelName($paymentMethodDeletedTransfer->getName())
+            ->setGroupName($paymentMethodDeletedTransfer->getProviderName());
 
         return $paymentMethodTransfer;
     }
