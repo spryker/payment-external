@@ -1,167 +1,172 @@
 <?xml version="1.0"?>
-<transfers xmlns="spryker:transfer-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="spryker:transfer-01 http://static.spryker.com/transfer-01.xsd">
-  <transfer name="Address">
-    <property name="iso2Code" type="string"/>
-    <property name="firstName" type="string"/>
-    <property name="lastName" type="string"/>
-  </transfer>
+<transfers xmlns="spryker:transfer-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="spryker:transfer-01 http://static.spryker.com/transfer-01.xsd">
+    <transfer name="Address">
+        <property name="iso2Code" type="string"/>
+        <property name="firstName" type="string"/>
+        <property name="lastName" type="string"/>
+    </transfer>
 
-  <transfer name="CheckoutError">
-    <property name="errorCode" type="int"/>
-    <property name="message" type="string"/>
-  </transfer>
+    <transfer name="CheckoutError">
+        <property name="errorCode" type="int"/>
+        <property name="message" type="string"/>
+    </transfer>
 
-  <transfer name="CheckoutResponse">
-    <property name="isSuccess" type="bool"/>
-    <property name="saveOrder" type="SaveOrder"/>
-    <property name="redirectUrl" type="string"/>
-    <property name="isExternalRedirect" type="bool"/>
-    <property name="errors" type="CheckoutError[]" singular="error"/>
-  </transfer>
+    <transfer name="CheckoutResponse">
+        <property name="isSuccess" type="bool"/>
+        <property name="saveOrder" type="SaveOrder"/>
+        <property name="redirectUrl" type="string"/>
+        <property name="isExternalRedirect" type="bool"/>
+        <property name="errors" type="CheckoutError[]" singular="error"/>
+    </transfer>
 
-  <transfer name="Customer">
-    <property name="customerReference" type="string"/>
-    <property name="locale" type="Locale"/>
-  </transfer>
+    <transfer name="Customer">
+        <property name="customerReference" type="string"/>
+        <property name="locale" type="Locale"/>
+    </transfer>
 
-  <transfer name="Currency">
-    <property name="code" type="string"/>
-  </transfer>
+    <transfer name="Currency">
+        <property name="code" type="string"/>
+    </transfer>
 
-  <transfer name="Item">
-    <property name="idSalesOrderItem" type="int"/>
-    <property name="name" type="string"/>
-  </transfer>
+    <transfer name="Item">
+        <property name="idSalesOrderItem" type="int"/>
+        <property name="name" type="string"/>
+    </transfer>
 
-  <transfer name="Locale">
-    <property name="localeName" type="string"/>
-  </transfer>
+    <transfer name="Locale">
+        <property name="localeName" type="string"/>
+    </transfer>
 
-  <transfer name="Message">
-    <property name="value" type="string"/>
-  </transfer>
+    <transfer name="Message">
+        <property name="value" type="string"/>
+    </transfer>
 
-  <transfer name="Order">
-    <property name="idSalesOrder" type="int"/>
-    <property name="customerReference" type="string"/>
-    <property name="orderReference" type="string"/>
-  </transfer>
+    <transfer name="Order">
+        <property name="idSalesOrder" type="int"/>
+        <property name="customerReference" type="string"/>
+        <property name="orderReference" type="string"/>
+    </transfer>
 
-  <transfer name="OrderCancelRequest">
-    <property name="idSalesOrder" type="int"/>
-    <property name="customer" type="Customer"/>
-  </transfer>
+    <transfer name="OrderCancelRequest">
+        <property name="idSalesOrder" type="int"/>
+        <property name="customer" type="Customer"/>
+    </transfer>
 
-  <transfer name="OrderCancelResponse">
-    <property name="isSuccessful" type="bool"/>
-    <property name="messages" type="Message[]" singular="message"/>
-  </transfer>
+    <transfer name="OrderCancelResponse">
+        <property name="isSuccessful" type="bool"/>
+        <property name="messages" type="Message[]" singular="message"/>
+    </transfer>
 
-  <transfer name="OrderFilter">
-    <property name="orderReference" type="string"/>
-  </transfer>
+    <transfer name="OrderFilter">
+        <property name="orderReference" type="string"/>
+    </transfer>
 
-  <transfer name="Payment">
-    <property name="paymentSelection" type="string"/>
-    <property name="amount" type="int"/>
-    <property name="externalPayments" type="array" associative="true" singular="externalPayment"/>
-    <property name="paymentMethod" type="string"/>
-  </transfer>
+    <transfer name="Payment">
+        <property name="paymentSelection" type="string"/>
+        <property name="amount" type="int"/>
+        <property name="externalPayments" type="array" associative="true" singular="externalPayment"/>
+        <property name="paymentMethod" type="string"/>
+    </transfer>
 
-  <transfer name="PaymentExternalTokenResponse">
-    <property name="token" type="string"/>
-    <property name="isSuccessful" type="bool"/>
-    <property name="message" type="string"/>
-  </transfer>
+    <transfer name="PaymentExternalTokenResponse">
+        <property name="token" type="string"/>
+        <property name="isSuccessful" type="bool"/>
+        <property name="message" type="string"/>
+    </transfer>
 
-  <transfer name="PaymentExternalTokenRequest">
-    <property name="requestUrl" type="string"/>
-    <property name="postData" type="array" associative="true" singular="postValue"/>
-  </transfer>
+    <transfer name="PaymentExternalTokenRequest">
+        <property name="requestUrl" type="string"/>
+        <property name="postData" type="array" associative="true" singular="postValue"/>
+    </transfer>
 
-  <transfer name="PaymentMethod">
-    <property name="labelName" type="string"/>
-    <property name="groupName" type="string"/>
-    <property name="checkoutOrderTokenUrl" type="string"/>
-    <property name="checkoutRedirectUrl" type="string"/>
-    <property name="isActive" type="bool"/>
-    <property name="isDeleted" type="bool"/>
-    <property name="isExternal" type="bool"/>
-    <property name="name" type="string"/>
-    <property name="idPaymentProvider" type="int"/>
-    <property name="paymentMethodKey" type="string" strict="true"/>
-    <property name="idPaymentMethod" type="int"/>
-  </transfer>
+    <transfer name="PaymentMethod">
+        <property name="labelName" type="string"/>
+        <property name="groupName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+        <property name="isActive" type="bool"/>
+        <property name="isDeleted" type="bool"/>
+        <property name="isExternal" type="bool"/>
+        <property name="name" type="string"/>
+        <property name="idPaymentProvider" type="int"/>
+        <property name="paymentMethodKey" type="string" strict="true"/>
+        <property name="idPaymentMethod" type="int"/>
+    </transfer>
 
-  <transfer name="PaymentMethodEvent">
-    <property name="name" type="string"/>
-    <property name="providerName" type="string"/>
-    <property name="checkoutOrderTokenUrl" type="string"/>
-    <property name="checkoutRedirectUrl" type="string"/>
-  </transfer>
+    <transfer name="PaymentMethodEvent">
+        <property name="name" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+    </transfer>
 
-  <transfer name="PaymentMethodResponse">
-    <property name="paymentMethod" type="PaymentMethod"/>
-  </transfer>
+    <transfer name="PaymentMethodResponse">
+        <property name="paymentMethod" type="PaymentMethod"/>
+    </transfer>
 
-  <transfer name="PaymentMethods">
-    <property name="methods" type="PaymentMethod[]" singular="method"/>
-  </transfer>
+    <transfer name="PaymentMethods">
+        <property name="methods" type="PaymentMethod[]" singular="method"/>
+    </transfer>
 
-  <transfer name="PaymentProvider">
-    <property name="idPaymentProvider" type="int"/>
-    <property name="paymentProviderKey" type="string"/>
-    <property name="name" type="string"/>
-  </transfer>
+    <transfer name="PaymentProvider">
+        <property name="idPaymentProvider" type="int"/>
+        <property name="paymentProviderKey" type="string"/>
+        <property name="name" type="string"/>
+    </transfer>
 
-  <transfer name="PaymentProviderResponse" strict="true">
-    <property name="paymentProvider" type="PaymentProvider"/>
-  </transfer>
+    <transfer name="PaymentProviderResponse" strict="true">
+        <property name="paymentProvider" type="PaymentProvider"/>
+    </transfer>
 
-  <transfer name="QueryCriteria">
-    <property name="conditionOperator" type="string"/>
-    <property name="whereConditions" type="QueryWhereCondition[]" singular="whereCondition"/>
-  </transfer>
+    <transfer name="QueryCriteria">
+        <property name="conditionOperator" type="string"/>
+        <property name="whereConditions" type="QueryWhereCondition[]" singular="whereCondition"/>
+    </transfer>
 
-  <transfer name="QueryWhereCondition">
-    <property name="column" type="string"/>
-    <property name="value" type="string"/>
-    <property name="comparison" type="string"/>
-  </transfer>
+    <transfer name="QueryWhereCondition">
+        <property name="column" type="string"/>
+        <property name="value" type="string"/>
+        <property name="comparison" type="string"/>
+    </transfer>
 
-  <transfer name="Quote">
-    <property name="orderReference" type="string"/>
-    <property name="customer" type="Customer"/>
-    <property name="currency" type="Currency"/>
-    <property name="payment" type="Payment"/>
-    <property name="store" type="Store"/>
-    <property name="billingAddress" type="Address"/>
-    <property name="items" type="Item[]" singular="item"/>
-  </transfer>
+    <transfer name="Quote">
+        <property name="orderReference" type="string"/>
+        <property name="customer" type="Customer"/>
+        <property name="currency" type="Currency"/>
+        <property name="payment" type="Payment"/>
+        <property name="store" type="Store"/>
+        <property name="billingAddress" type="Address"/>
+        <property name="items" type="Item[]" singular="item"/>
+    </transfer>
 
-  <transfer name="SaveOrder">
-    <property name="orderReference" type="string"/>
-  </transfer>
+    <transfer name="SaveOrder">
+        <property name="orderReference" type="string"/>
+    </transfer>
 
-  <transfer name="Store">
-    <property name="name" type="string"/>
-  </transfer>
+    <transfer name="Store">
+        <property name="name" type="string"/>
+    </transfer>
 
-  <transfer name="PaymentMethodAdded">
-    <property name="name" type="string"/>
-    <property name="providerName" type="string"/>
-    <property name="checkoutOrderTokenUrl" type="string"/>
-    <property name="checkoutRedirectUrl" type="string"/>
-    <property name="messageAttributes" type="MessageAttributes"/>
-  </transfer>
+    <transfer name="PaymentMethodAdded">
+        <property name="name" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+    </transfer>
 
-  <transfer name="MessageAttributes"/>
-  <transfer name="PaymentMethodDeleted">
-    <property name="name" type="string"/>
-    <property name="providerName" type="string"/>
-    <property name="checkoutOrderTokenUrl" type="string"/>
-    <property name="checkoutRedirectUrl" type="string"/>
-    <property name="messageAttributes" type="MessageAttributes"/>
-  </transfer>
+    <transfer name="MessageAttributes">
+        <property name="store" type="string"/>
+        <property name="tenantIdentifier" type="string"/>
+    </transfer>
+
+    <transfer name="PaymentMethodDeleted">
+        <property name="name" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+    </transfer>
 
 </transfers>
