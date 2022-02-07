@@ -7,9 +7,7 @@
 
 namespace Spryker\Zed\PaymentExternal\Business\Disabler;
 
-use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
 use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
-use Generated\Shared\Transfer\PaymentMethodTransfer;
 
 interface PaymentExternalDisablerInterface
 {

@@ -14,7 +14,6 @@ use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInte
 use Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 
-
 class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 {
     /**
@@ -35,6 +34,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
     /**
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
+     * @param \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface $paymentMethodEventMapper
      */
     public function __construct(
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
@@ -53,10 +53,9 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
      */
     public function enableExternalPaymentMethod(PaymentMethodAddedTransfer $paymentMethodAddedTransfer): PaymentMethodTransfer
     {
-
         $paymentMethodTransfer = $this->paymentMethodEventMapper->mapPaymentMethodAddedTransferToPaymentMethodTransfer(
             $paymentMethodAddedTransfer,
-            new PaymentMethodTransfer()
+            new PaymentMethodTransfer(),
         );
 
         $paymentMethodTransfer->requireLabelName()

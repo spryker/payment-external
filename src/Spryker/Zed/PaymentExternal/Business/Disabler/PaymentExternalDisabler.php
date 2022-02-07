@@ -7,7 +7,6 @@
 
 namespace Spryker\Zed\PaymentExternal\Business\Disabler;
 
-use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
 use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
@@ -25,6 +24,7 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
      * @var \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface
      */
     protected $paymentMethodKeyGenerator;
+
     /**
      * @var \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface
      */
@@ -33,6 +33,7 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
     /**
      * @param \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface $entityManager
      * @param \Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
+     * @param \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface $paymentMethodEventMapper
      */
     public function __construct(
         PaymentExternalEntityManagerInterface $entityManager,
@@ -45,7 +46,7 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedransfer
      *
      * @return void
      */
@@ -53,7 +54,7 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
     {
         $paymentMethodTransfer = $this->paymentMethodEventMapper->mapPaymentMethodDeletedTransferToPaymentMethodTransfer(
             $paymentMethodDeletedransfer,
-            new PaymentMethodTransfer()
+            new PaymentMethodTransfer(),
         );
 
         $paymentMethodTransfer->requireLabelName()

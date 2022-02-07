@@ -5,7 +5,6 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-
 namespace Spryker\Zed\PaymentExternal\Communication\Plugin\MessageBroker;
 
 use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
@@ -14,10 +13,15 @@ use Spryker\Zed\MessageBrokerExtension\Dependency\Plugin\MessageHandlerPluginInt
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
+ * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
 class PaymentExternalPaymentMethodDeletedMessageHandlerPlugin extends AbstractPlugin implements MessageHandlerPluginInterface
 {
     /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
      * @param \Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer
      *
      * @return void
@@ -28,12 +32,15 @@ class PaymentExternalPaymentMethodDeletedMessageHandlerPlugin extends AbstractPl
     }
 
     /**
+     * {@inheritDoc}
      * Return an array where the key is the class name to be handled and the value is the callable that handles the message.
+     *
+     * @api
      *
      * @return array<string, callable>
      */
     public function handles(): iterable
     {
-        yield \Generated\Shared\Transfer\PaymentMethodDeletedTransfer::class => [$this, 'onPaymentMethodDeleted'];
+        yield PaymentMethodDeletedTransfer::class => [$this, 'onPaymentMethodDeleted'];
     }
 }
