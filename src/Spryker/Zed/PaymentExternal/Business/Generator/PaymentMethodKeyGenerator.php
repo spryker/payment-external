@@ -30,10 +30,10 @@ class PaymentMethodKeyGenerator implements PaymentMethodKeyGeneratorInterface
      *
      * @return string
      */
-    public function generatePaymentMethodKey(string $paymentProviderName, string $paymentMethodName): string
+    public function generatePaymentMethodKey(string $paymentProviderName, string $paymentMethodName, string $storeReference): string
     {
         return $this->utilTextService->generateSlug(
-            sprintf('%s %s', $paymentProviderName, $paymentMethodName),
+            sprintf('%s %s %s', $paymentProviderName, $paymentMethodName, $storeReference),
         );
     }
 }

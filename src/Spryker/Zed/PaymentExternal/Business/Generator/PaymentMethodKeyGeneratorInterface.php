@@ -15,5 +15,5 @@ interface PaymentMethodKeyGeneratorInterface
      *
      * @return string
      */
-    public function generatePaymentMethodKey(string $paymentProviderName, string $paymentMethodName): string;
+    public function generatePaymentMethodKey(string $paymentProviderName, string $paymentMethodName, string $storeReference): string;
 }
