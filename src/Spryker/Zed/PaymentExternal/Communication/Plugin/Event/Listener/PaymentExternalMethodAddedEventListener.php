@@ -26,11 +26,14 @@ class PaymentExternalMethodAddedEventListener extends AbstractPlugin implements 
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
+        $storeTransfer = $this->getFactory()->getStoreFacade()->findStoreByStoreReference($transfer->getStoreReference());
+
         $paymentMethodTransfer = (new PaymentMethodTransfer())
             ->setLabelName($transfer->getName())
             ->setGroupName($transfer->getProviderName())
             ->setCheckoutOrderTokenUrl($transfer->getCheckoutOrderTokenUrl())
-            ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl());
+            ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl())
+            ->setStoreReference($storeTransfer);
 
         $this->getFacade()->enableExternalPaymentMethod($paymentMethodTransfer);
     }

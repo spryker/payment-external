@@ -13,6 +13,7 @@ use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeBridge;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceBridge;
 
 /**
@@ -51,6 +52,11 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     public const PROPEL_QUERY_PAYMENT_METHOD = 'PROPEL_QUERY_PAYMENT_METHOD';
 
     /**
+     * @var string
+     */
+    public const FACADE_STORE = 'FACADE_STORE';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -62,6 +68,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addPaymentFacade($container);
         $container = $this->addSalesFacade($container);
         $container = $this->addUtilTextService($container);
+        $container = $this->addStoreFacade($container);
 
         return $container;
     }
@@ -163,6 +170,21 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::PROPEL_QUERY_PAYMENT_METHOD, $container->factory(function () {
             return SpyPaymentMethodQuery::create();
+        }));
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addStoreFacade(Container $container){
+        $container->set(static::FACADE_STORE, $container->factory(function (Container $container){
+            return new PaymentExternalToStoreFacadeBridge(
+                $container->getLocator()->store()->facade()
+            );
         }));
 
         return $container;

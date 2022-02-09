@@ -30,6 +30,7 @@ use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacade
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface getEntityManager()
@@ -151,5 +152,12 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     public function getUtilTextService(): PaymentExternalToUtilTextServiceInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_UTIL_TEXT);
+    }
+
+    /**
+     * @return \Spryker\Zed\Store\Business\StoreFacadeInterface
+     */
+    public function getStoreFacade():StoreFacadeInterface{
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_STORE);
     }
 }
