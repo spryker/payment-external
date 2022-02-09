@@ -22,6 +22,7 @@ use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalConfig;
+use Spryker\Zed\Store\Business\StoreFacadeInterface;
 
 class OrderPostSaveHook implements OrderPostSaveHookInterface
 {
@@ -46,6 +47,11 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     protected $paymentFacade;
 
     /**
+     * @var \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge
+     */
+    protected $storeFacade;
+
+    /**
      * @var \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
      */
     protected $paymentExternalClient;
@@ -61,19 +67,22 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Client\PaymentExternal\PaymentExternalClientInterface $paymentExternalClient
      * @param \Spryker\Zed\PaymentExternal\PaymentExternalConfig $paymentExternalConfig
+     * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge $storeFacade
      */
     public function __construct(
         QuoteDataMapperInterface $quoteDataMapper,
         PaymentExternalToLocaleFacadeInterface $localeFacade,
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
         PaymentExternalClientInterface $paymentExternalClient,
-        PaymentExternalConfig $paymentExternalConfig
+        PaymentExternalConfig $paymentExternalConfig,
+        StoreFacadeInterface $storeFacade
     ) {
         $this->quoteDataMapper = $quoteDataMapper;
         $this->localeFacade = $localeFacade;
         $this->paymentFacade = $paymentFacade;
         $this->paymentExternalClient = $paymentExternalClient;
         $this->paymentExternalConfig = $paymentExternalConfig;
+        $this->storeFacade = $storeFacade;
     }
 
     /**
@@ -190,7 +199,8 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'tenantIdentifier' => $this->paymentExternalConfig->getTenantIdentifier(),
+            'storeReference' => $this->storeFacade->findStoreByStoreReference(
+                $paymentMethodTransfer->getStoreReference()->getStoreReference()),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())

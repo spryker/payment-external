@@ -103,6 +103,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
             $this->getPaymentFacade(),
             $this->getPaymentExternalClient(),
             $this->getConfig(),
+            $this->getStoreFacade()
         );
     }
 
