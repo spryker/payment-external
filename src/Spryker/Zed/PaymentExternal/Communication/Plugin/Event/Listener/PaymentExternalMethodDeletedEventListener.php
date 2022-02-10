@@ -11,7 +11,7 @@ use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
 use Spryker\Zed\Event\Dependency\Plugin\EventHandlerInterface;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\PaymentExternal\Business\Exception\IncorrectDataException;
+use Spryker\Zed\PaymentExternal\Business\Exception\InvalidStoreReferenceException;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalBusinessFactory getFactory()
@@ -30,8 +30,8 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
     {
         $storeTransfer = $this->getFactory()->getStoreReferenceService()->getStoreByStoreName($transfer->getStoreReference());
 
-        if(!$storeTransfer){
-            throw new IncorrectDataException();
+        if (!$storeTransfer) {
+            throw new InvalidStoreReferenceException();
         }
 
         $paymentMethodTransfer = (new PaymentMethodTransfer())
