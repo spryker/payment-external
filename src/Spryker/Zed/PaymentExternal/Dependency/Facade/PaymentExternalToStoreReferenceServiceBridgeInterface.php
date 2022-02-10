@@ -9,7 +9,7 @@ namespace Spryker\Zed\PaymentExternal\Dependency\Facade;
 
 use Generated\Shared\Transfer\StoreTransfer;
 
-interface PaymentExternalToStoreFacadeBridgeInterface
+interface PaymentExternalToStoreReferenceServiceBridgeInterface
 {
     /**
      * @param string $storeReference

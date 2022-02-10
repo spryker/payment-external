@@ -4,10 +4,10 @@ namespace Spryker\Zed\PaymentExternal\Dependency\Facade;
 
 use Generated\Shared\Transfer\StoreTransfer;
 
-class PaymentExternalToStoreFacadeBridge implements PaymentExternalToStoreFacadeBridgeInterface
+class PaymentExternalToStoreReferenceServiceBridge implements PaymentExternalToStoreReferenceServiceBridgeInterface
 {
     /**
-     * @var \Generated\Shared\Transfer\StoreTransfer
+     * @var \Spryker\Service\StoreReference\StoreReferenceService
      */
     protected $storeFacade;
 

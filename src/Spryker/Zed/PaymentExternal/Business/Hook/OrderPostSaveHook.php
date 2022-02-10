@@ -17,6 +17,7 @@ use Generated\Shared\Transfer\PaymentTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\SaveOrderTransfer;
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
+use Spryker\Service\StoreReference\StoreReferenceService;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
@@ -47,9 +48,9 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     protected $paymentFacade;
 
     /**
-     * @var \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge
+     * @var \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceServiceBridge
      */
-    protected $storeFacade;
+    protected $storeReferenceService;
 
     /**
      * @var \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
@@ -67,7 +68,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Client\PaymentExternal\PaymentExternalClientInterface $paymentExternalClient
      * @param \Spryker\Zed\PaymentExternal\PaymentExternalConfig $paymentExternalConfig
-     * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge $storeFacade
+     * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceServiceBridge $storeFacade
      */
     public function __construct(
         QuoteDataMapperInterface $quoteDataMapper,
@@ -75,14 +76,14 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
         PaymentExternalClientInterface $paymentExternalClient,
         PaymentExternalConfig $paymentExternalConfig,
-        StoreFacadeInterface $storeFacade
+        StoreReferenceService $storeReferenceService
     ) {
         $this->quoteDataMapper = $quoteDataMapper;
         $this->localeFacade = $localeFacade;
         $this->paymentFacade = $paymentFacade;
         $this->paymentExternalClient = $paymentExternalClient;
         $this->paymentExternalConfig = $paymentExternalConfig;
-        $this->storeFacade = $storeFacade;
+        $this->storeReferenceService = $storeReferenceService;
     }
 
     /**
@@ -199,7 +200,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'storeReference' => $this->storeFacade->findStoreByStoreReference(
+            'storeReference' => $this->getFactory()->getStoreFacade()->findStoreByStoreReference(
                 $paymentMethodTransfer->getStoreReference()->getStoreReference()),
         ];
 

@@ -14,6 +14,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Spryker\Zed\PaymentExternal\Business\Exception\IncorrectDataException;
 
 /**
+ * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalBusinessFactory getFactory()
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
  * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
@@ -27,11 +28,7 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
-        if(!$transfer->getStoreReference()){
-            throw new IncorrectDataException();
-        }
-
-        $storeTransfer = $this->getFactory()->getStoreFacade()->findStoreByStoreReference($transfer->getStoreReference());
+        $storeTransfer = $this->getFactory()->getStoreReferenceService()->getStoreByStoreName($transfer->getStoreReference());
 
         if(!$storeTransfer){
             throw new IncorrectDataException();

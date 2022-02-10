@@ -8,6 +8,7 @@
 namespace Spryker\Zed\PaymentExternal\Business;
 
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
+use Spryker\Service\StoreReference\StoreReferenceService;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisabler;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisablerInterface;
@@ -103,7 +104,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
             $this->getPaymentFacade(),
             $this->getPaymentExternalClient(),
             $this->getConfig(),
-            $this->getStoreFacade()
+            $this->getStoreReferenceService()
         );
     }
 
@@ -156,9 +157,9 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\Store\Business\StoreFacadeInterface
+     * @return \Spryker\Service\StoreReference\StoreReferenceService
      */
-    public function getStoreFacade():StoreFacadeInterface{
-        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_STORE);
+    public function getStoreReferenceService():StoreReferenceService{
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_STORE_REFERENCE);
     }
 }

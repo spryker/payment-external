@@ -13,7 +13,7 @@ use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeBridge;
-use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreFacadeBridge;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceServiceBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceBridge;
 
 /**
@@ -54,7 +54,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const FACADE_STORE = 'FACADE_STORE';
+    public const SERVICE_STORE_REFERENCE = 'FACADE_STORE';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -180,10 +180,10 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function addStoreFacade(Container $container){
-        $container->set(static::FACADE_STORE, $container->factory(function (Container $container){
-            return new PaymentExternalToStoreFacadeBridge(
-                $container->getLocator()->store()->facade()
+    protected function addStoreReferenceService(Container $container){
+        $container->set(static::SERVICE_STORE_REFERENCE, $container->factory(function (Container $container){
+            return new PaymentExternalToStoreReferenceServiceBridge(
+                $container->getLocator()->storeReference()->service()
             );
         }));
 
