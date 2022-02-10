@@ -8,7 +8,6 @@
 namespace Spryker\Zed\PaymentExternal\Communication\Plugin\Event\Listener;
 
 use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
-use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
 use Spryker\Zed\Event\Dependency\Plugin\EventHandlerInterface;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
@@ -27,7 +26,7 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
-        $paymentMethodDeletedTransfer = (new PaymentMethodDeletedTransfer)
+        $paymentMethodDeletedTransfer = (new PaymentMethodDeletedTransfer())
             ->setName($transfer->getName())
             ->setProviderName($transfer->getProviderName());
 
