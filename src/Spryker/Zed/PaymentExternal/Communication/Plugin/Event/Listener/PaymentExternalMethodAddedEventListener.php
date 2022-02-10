@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\PaymentExternal\Communication\Plugin\Event\Listener;
 
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
 use Spryker\Zed\Event\Dependency\Plugin\EventHandlerInterface;
@@ -26,12 +27,7 @@ class PaymentExternalMethodAddedEventListener extends AbstractPlugin implements 
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
-        $paymentMethodTransfer = (new PaymentMethodTransfer())
-            ->setLabelName($transfer->getName())
-            ->setGroupName($transfer->getProviderName())
-            ->setCheckoutOrderTokenUrl($transfer->getCheckoutOrderTokenUrl())
-            ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl());
-
-        $this->getFacade()->enableExternalPaymentMethod($paymentMethodTransfer);
+        $paymentMethodAddedTransfer = (new PaymentMethodAddedTransfer)->fromArray($transfer->toArray());
+        $this->getFacade()->enableExternalPaymentMethod($paymentMethodAddedTransfer);
     }
 }

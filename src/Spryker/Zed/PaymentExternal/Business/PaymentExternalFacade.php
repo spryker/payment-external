@@ -33,7 +33,7 @@ class PaymentExternalFacade extends AbstractFacade implements PaymentExternalFac
      *
      * @param \Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer
      *
-     * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
+     * @return \Generated\Shared\Transfer\PaymentMethodTransfer
      */
     public function enableExternalPaymentMethod(PaymentMethodAddedTransfer $paymentMethodAddedTransfer): PaymentMethodTransfer
     {
