@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Zed\PaymentExternal\Dependency\Service;
+namespace Spryker\Zed\PaymentExternal\Dependency\Facade;
 
 use Generated\Shared\Transfer\StoreTransfer;
 
-interface PaymentExternalToStoreReferenceServiceInterface
+interface PaymentExternalToStoreReferenceFacadeInterface
 {
     /**
      * @param string $storeReference

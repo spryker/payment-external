@@ -161,6 +161,6 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
      * @return \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface
      */
     public function getStoreReferenceService():PaymentExternalToStoreReferenceServiceInterface{
-        return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_STORE_REFERENCE);
+        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_STORE_REFERENCE);
     }
 }
