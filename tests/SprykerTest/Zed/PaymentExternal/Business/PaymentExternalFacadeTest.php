@@ -68,6 +68,7 @@ class PaymentExternalFacadeTest extends Unit
             PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodTransfer::STORE_REFERENCE => 'development_test-DE',
         ]);
 
         // Act
@@ -92,10 +93,11 @@ class PaymentExternalFacadeTest extends Unit
     {
         // Arrange
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
-            PaymentMethodTransfer::LABEL_NAME => 'label-name-2',
-            PaymentMethodTransfer::GROUP_NAME => 'group-name-2',
+            PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
+            PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodTransfer::STORE_REFERENCE => 'development_test-DE',
         ]);
 
         // Act
@@ -103,6 +105,7 @@ class PaymentExternalFacadeTest extends Unit
             ->enableExternalPaymentMethod($paymentMethodTransfer);
 
         $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
+
         $filterPaymentMethodTransfer = (new PaymentMethodTransfer())
             ->setIdPaymentMethod($paymentMethodTransfer->getIdPaymentMethod());
         $updatedPaymentMethodTransfer = $this->tester->findPaymentMethod($filterPaymentMethodTransfer);
@@ -161,11 +164,13 @@ class PaymentExternalFacadeTest extends Unit
     public function testExecuteOrderPostSaveHookReceivesTokenAndUsingItAddsRedirectUrlWithCorrectData(): void
     {
         $paymentProviderTransfer = $this->tester->havePaymentProvider();
+
         $paymentMethodTransfer = $this->tester->havePaymentMethod([
             PaymentMethodTransfer::IS_DELETED => false,
             PaymentMethodTransfer::IS_EXTERNAL => true,
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => static::CHECKOUT_ORDER_TOKEN_URL,
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => static::CHECKOUT_REDIRECT_URL,
+            PaymentMethodTransfer::STORE_REFERENCE => '',
             PaymentMethodTransfer::ID_PAYMENT_PROVIDER => $paymentProviderTransfer->getIdPaymentProvider(),
         ]);
 

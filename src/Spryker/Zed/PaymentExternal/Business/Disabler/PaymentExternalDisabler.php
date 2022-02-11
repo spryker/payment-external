@@ -29,9 +29,8 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
      */
     public function __construct(
         PaymentExternalEntityManagerInterface $entityManager,
-        PaymentMethodKeyGeneratorInterface    $paymentMethodKeyGenerator
-    )
-    {
+        PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
+    ) {
         $this->entityManager = $entityManager;
         $this->paymentMethodKeyGenerator = $paymentMethodKeyGenerator;
     }
@@ -49,11 +48,10 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
             $paymentMethodTransfer->getLabelNameOrFail(),
-            $paymentMethodTransfer->getStoreReferenceOrFail()->getStoreReference()
+            $paymentMethodTransfer->getStoreReferenceOrFail(),
         );
 
         $paymentMethodTransfer->setPaymentMethodKey($paymentMethodKey);
-
         $this->entityManager->deletePaymentMethod($paymentMethodTransfer);
     }
 }

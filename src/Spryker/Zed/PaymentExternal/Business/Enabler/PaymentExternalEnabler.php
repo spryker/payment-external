@@ -9,7 +9,6 @@ namespace Spryker\Zed\PaymentExternal\Business\Enabler;
 
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
-use Spryker\Zed\PaymentExternal\Business\Exception\InvalidStoreReferenceException;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 
@@ -31,9 +30,8 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
      */
     public function __construct(
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
-        PaymentMethodKeyGeneratorInterface      $paymentMethodKeyGenerator
-    )
-    {
+        PaymentMethodKeyGeneratorInterface $paymentMethodKeyGenerator
+    ) {
         $this->paymentFacade = $paymentFacade;
         $this->paymentMethodKeyGenerator = $paymentMethodKeyGenerator;
     }
@@ -45,15 +43,6 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
      */
     public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
     {
-        if(is_null($paymentMethodTransfer->getStoreReferenceOrFail())){
-            throw new InvalidStoreReferenceException();
-        }
-
-        if(is_null($paymentMethodTransfer->getStoreReferenceOrFail()->getStoreReference())){
-            throw new InvalidStoreReferenceException();
-        }
-
-
         $paymentMethodTransfer->requireLabelName()
             ->requireGroupName()
             ->requireCheckoutOrderTokenUrl()
@@ -62,7 +51,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
             $paymentMethodTransfer->getLabelNameOrFail(),
-            $paymentMethodTransfer->getStoreReferenceOrFail()->getStoreReference()
+            $paymentMethodTransfer->getStoreReferenceOrFail(),
         );
 
         $paymentProviderTransfer = $this->findOrCreatePaymentProvider($paymentMethodTransfer->getGroupNameOrFail());
@@ -86,7 +75,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 
         $paymentMethodResponseTransfer = $this->paymentFacade->createPaymentMethod($paymentMethodTransfer);
 
-        return $paymentMethodResponseTransfer->getPaymentMethodOrFail();
+        return $paymentMethodResponseTransfer->getPaymentMethodOrFail()->setStoreReference($paymentMethodTransfer->getStoreReference());
     }
 
     /**

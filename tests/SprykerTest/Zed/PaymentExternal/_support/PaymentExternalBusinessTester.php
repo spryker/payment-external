@@ -11,9 +11,11 @@ use Codeception\Actor;
 use Generated\Shared\DataBuilder\OrderFilterBuilder;
 use Generated\Shared\DataBuilder\PaymentMethodBuilder;
 use Generated\Shared\DataBuilder\PaymentProviderBuilder;
+use Generated\Shared\DataBuilder\StoreBuilder;
 use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
+use Generated\Shared\Transfer\StoreTransfer;
 use Orm\Zed\Sales\Persistence\SpySalesOrder;
 
 /**
@@ -45,6 +47,16 @@ class PaymentExternalBusinessTester extends Actor
     public function getPaymentMethodTransfer(array $seedData = []): PaymentMethodTransfer
     {
         return (new PaymentMethodBuilder($seedData))->build();
+    }
+
+    /**
+     * @param array $seedData
+     *
+     * @return /Generated/Shared/Transfer/StoreTransfer
+     */
+    public function getStoreTransfer(array $seedData = []): StoreTransfer
+    {
+        return (new StoreBuilder($seedData))->build();
     }
 
     /**

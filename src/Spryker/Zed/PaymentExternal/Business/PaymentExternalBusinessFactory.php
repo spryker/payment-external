@@ -8,7 +8,6 @@
 namespace Spryker\Zed\PaymentExternal\Business;
 
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
-use Spryker\Service\StoreReference\StoreReferenceService;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisabler;
 use Spryker\Zed\PaymentExternal\Business\Disabler\PaymentExternalDisablerInterface;
@@ -29,10 +28,8 @@ use Spryker\Zed\PaymentExternal\Business\Reader\OrderReaderInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeInterface;
-use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
-use Spryker\Zed\Store\Business\StoreFacadeInterface;
 
 /**
  * @method \Spryker\Zed\PaymentExternal\Persistence\PaymentExternalEntityManagerInterface getEntityManager()
@@ -105,7 +102,6 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
             $this->getPaymentFacade(),
             $this->getPaymentExternalClient(),
             $this->getConfig(),
-            $this->getStoreReferenceService()
         );
     }
 
@@ -155,12 +151,5 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     public function getUtilTextService(): PaymentExternalToUtilTextServiceInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_UTIL_TEXT);
-    }
-
-    /**
-     * @return \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface
-     */
-    public function getStoreReferenceService():PaymentExternalToStoreReferenceServiceInterface{
-        return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_STORE_REFERENCE);
     }
 }

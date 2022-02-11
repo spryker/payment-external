@@ -12,6 +12,7 @@ interface PaymentMethodKeyGeneratorInterface
     /**
      * @param string $paymentProviderName
      * @param string $paymentMethodName
+     * @param string $storeReference
      *
      * @return string
      */

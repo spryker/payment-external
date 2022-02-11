@@ -18,11 +18,9 @@ use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\SaveOrderTransfer;
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
-use Spryker\Zed\PaymentExternal\Business\Exception\InvalidStoreReferenceException;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
-use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalConfig;
 
 class OrderPostSaveHook implements OrderPostSaveHookInterface
@@ -48,11 +46,6 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     protected $paymentFacade;
 
     /**
-     * @var \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface
-     */
-    protected $storeReferenceService;
-
-    /**
      * @var \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
      */
     protected $paymentExternalClient;
@@ -68,23 +61,19 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Client\PaymentExternal\PaymentExternalClientInterface $paymentExternalClient
      * @param \Spryker\Zed\PaymentExternal\PaymentExternalConfig $paymentExternalConfig
-     * @param \Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToStoreReferenceServiceInterface $storeReferenceService
      */
     public function __construct(
-        QuoteDataMapperInterface                        $quoteDataMapper,
-        PaymentExternalToLocaleFacadeInterface          $localeFacade,
-        PaymentExternalToPaymentFacadeInterface         $paymentFacade,
-        PaymentExternalClientInterface                  $paymentExternalClient,
-        PaymentExternalConfig                           $paymentExternalConfig,
-        PaymentExternalToStoreReferenceServiceInterface $storeReferenceService
-    )
-    {
+        QuoteDataMapperInterface $quoteDataMapper,
+        PaymentExternalToLocaleFacadeInterface $localeFacade,
+        PaymentExternalToPaymentFacadeInterface $paymentFacade,
+        PaymentExternalClientInterface $paymentExternalClient,
+        PaymentExternalConfig $paymentExternalConfig
+    ) {
         $this->quoteDataMapper = $quoteDataMapper;
         $this->localeFacade = $localeFacade;
         $this->paymentFacade = $paymentFacade;
         $this->paymentExternalClient = $paymentExternalClient;
         $this->paymentExternalConfig = $paymentExternalConfig;
-        $this->storeReferenceService = $storeReferenceService;
     }
 
     /**
@@ -94,10 +83,9 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * @return void
      */
     public function executeOrderPostSaveHook(
-        QuoteTransfer            $quoteTransfer,
+        QuoteTransfer $quoteTransfer,
         CheckoutResponseTransfer $checkoutResponseTransfer
-    ): void
-    {
+    ): void {
         $paymentSelectionKey = $this->getPaymentSelectionKey($quoteTransfer->getPaymentOrFail());
 
         if ($paymentSelectionKey !== PaymentTransfer::EXTERNAL_PAYMENTS) {
@@ -129,11 +117,11 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     /**
      * Returns only the first matching string for the pattern `[a-zA-Z0-9_]+`.
      *
+     * @example 'externalPayments[paymentKey]' becomes 'externalPayments'
+     *
      * @param \Generated\Shared\Transfer\PaymentTransfer $paymentTransfer
      *
      * @return string
-     * @example 'externalPayments[paymentKey]' becomes 'externalPayments'
-     *
      */
     protected function getPaymentSelectionKey(PaymentTransfer $paymentTransfer): string
     {
@@ -150,11 +138,11 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * Returns only the first matching string for the provided pattern in square brackets.
      * Returns the specified value if there is no match.
      *
+     * @example 'externalPayments[paymentKey]' becomes 'paymentKey'
+     *
      * @param \Generated\Shared\Transfer\PaymentTransfer $paymentTransfer
      *
      * @return string
-     * @example 'externalPayments[paymentKey]' becomes 'paymentKey'
-     *
      */
     protected function getPaymentMethodKey(PaymentTransfer $paymentTransfer): string
     {
@@ -176,10 +164,9 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      */
     protected function requestPaymentExternalToken(
         PaymentMethodTransfer $paymentMethodTransfer,
-        QuoteTransfer         $quoteTransfer,
-        SaveOrderTransfer     $saveOrderTransfer
-    ): PaymentExternalTokenResponseTransfer
-    {
+        QuoteTransfer $quoteTransfer,
+        SaveOrderTransfer $saveOrderTransfer
+    ): PaymentExternalTokenResponseTransfer {
         $localeTransfer = $this->localeFacade->getCurrentLocale();
         $quoteTransfer->setOrderReference($saveOrderTransfer->getOrderReference());
         $quoteTransfer->getCustomerOrFail()->setLocale($localeTransfer);
@@ -203,8 +190,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'storeReference' => $this->storeReferenceService->getStoreByStoreReference(
-                $paymentMethodTransfer->getStoreReference()->getStoreReference()),
+            'storeReference' => $paymentMethodTransfer->getStoreReference(),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())
@@ -254,10 +240,9 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      */
     protected function processPaymentExternalTokenResponse(
         PaymentExternalTokenResponseTransfer $paymentExternalTokenResponseTransfer,
-        CheckoutResponseTransfer             $checkoutResponseTransfer,
-        PaymentMethodTransfer                $paymentMethodTransfer
-    ): void
-    {
+        CheckoutResponseTransfer $checkoutResponseTransfer,
+        PaymentMethodTransfer $paymentMethodTransfer
+    ): void {
         if (!$paymentExternalTokenResponseTransfer->getIsSuccessful()) {
             $checkoutErrorTransfer = (new CheckoutErrorTransfer())
                 ->setErrorCode(static::ERROR_CODE_PAYMENT_FAILED)

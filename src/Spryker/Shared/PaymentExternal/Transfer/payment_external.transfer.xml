@@ -91,7 +91,7 @@
         <property name="idPaymentProvider" type="int"/>
         <property name="paymentMethodKey" type="string" strict="true"/>
         <property name="idPaymentMethod" type="int"/>
-        <property name="storeReference" type="Store"/>
+        <property name="storeReference" type="string"/>
     </transfer>
 
     <transfer name="PaymentMethodEvent">
