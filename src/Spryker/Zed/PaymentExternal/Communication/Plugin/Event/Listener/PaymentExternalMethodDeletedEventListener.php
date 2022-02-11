@@ -28,7 +28,8 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
-        $storeTransfer = $this->getFactory()->getStoreReferenceFacade()->getStoreByStoreName($transfer->getStoreReference());
+        $storeTransfer = $this->getFactory()->getStoreReferenceService()
+            ->getStoreByStoreName($transfer->getStoreReference());
 
         if (!$storeTransfer) {
             throw new InvalidStoreReferenceException();

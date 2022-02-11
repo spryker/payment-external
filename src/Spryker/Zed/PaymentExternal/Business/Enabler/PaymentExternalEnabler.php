@@ -9,6 +9,7 @@ namespace Spryker\Zed\PaymentExternal\Business\Enabler;
 
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
+use Spryker\Zed\PaymentExternal\Business\Exception\InvalidStoreReferenceException;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 
@@ -44,6 +45,15 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
      */
     public function enableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): PaymentMethodTransfer
     {
+        if(is_null($paymentMethodTransfer->getStoreReferenceOrFail())){
+            throw new InvalidStoreReferenceException();
+        }
+
+        if(is_null($paymentMethodTransfer->getStoreReferenceOrFail()->getStoreReference())){
+            throw new InvalidStoreReferenceException();
+        }
+
+
         $paymentMethodTransfer->requireLabelName()
             ->requireGroupName()
             ->requireCheckoutOrderTokenUrl()
