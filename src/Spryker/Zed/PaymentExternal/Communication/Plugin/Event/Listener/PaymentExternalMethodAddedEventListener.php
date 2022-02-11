@@ -26,7 +26,7 @@ class PaymentExternalMethodAddedEventListener extends AbstractPlugin implements 
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
-        $paymentMethodAddedTransfer = (new PaymentMethodAddedTransfer())->fromArray($transfer->toArray());
+        $paymentMethodAddedTransfer = (new PaymentMethodAddedTransfer())->fromArray($transfer->toArray(), true);
         $this->getFacade()->enableExternalPaymentMethod($paymentMethodAddedTransfer);
     }
 }
