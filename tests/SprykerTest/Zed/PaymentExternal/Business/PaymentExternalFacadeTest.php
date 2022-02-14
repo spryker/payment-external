@@ -63,11 +63,11 @@ class PaymentExternalFacadeTest extends Unit
      */
     public function testEnableExternalPaymentMethodReturnsSavedPaymentMethodTransferWithCorrectData(): void
     {
+        // Arrange
         $storeTransfer = $this->tester->getStoreTransfer([
             StoreTransfer::STORE_REFERENCE => 'development_test-DE',
         ]);
 
-        // Arrange
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
             PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
             PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
@@ -97,12 +97,16 @@ class PaymentExternalFacadeTest extends Unit
     public function testDisableExternalPaymentMethodSetsPaymentMethodIsDeletedFlagToTrueWithCorrectData(): void
     {
         // Arrange
+        $storeTransfer = $this->tester->getStoreTransfer([
+            StoreTransfer::STORE_REFERENCE => 'development_test-DE',
+        ]);
+
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
             PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
             PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
-            PaymentMethodTransfer::STORE => 'development_test-DE',
+            PaymentMethodTransfer::STORE => $storeTransfer,
         ]);
 
         // Act
