@@ -28,6 +28,7 @@ use Spryker\Zed\PaymentExternal\Business\Reader\OrderReaderInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToSalesFacadeInterface;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeBridge;
 use Spryker\Zed\PaymentExternal\Dependency\Service\PaymentExternalToUtilTextServiceInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 use Spryker\Zed\StoreReference\Business\StoreReferenceFacadeInterface;
@@ -163,9 +164,9 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface
+     * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeBridge
      */
-    public function getStoreReferenceFacade(): PaymentExternalToPaymentFacadeInterface
+    public function getStoreReferenceFacade(): PaymentExternalToStoreReferenceFacadeBridge
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::FACADE_STORE_REFERENCE_FACADE);
     }

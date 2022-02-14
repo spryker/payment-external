@@ -51,7 +51,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
             $paymentMethodTransfer->getLabelNameOrFail(),
-            $paymentMethodTransfer->getStoreReferenceOrFail(),
+            $paymentMethodTransfer->getStoreOrFail()->getStoreReferenceOrFail()
         );
 
         $paymentProviderTransfer = $this->findOrCreatePaymentProvider($paymentMethodTransfer->getGroupNameOrFail());
@@ -75,7 +75,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 
         $paymentMethodResponseTransfer = $this->paymentFacade->createPaymentMethod($paymentMethodTransfer);
 
-        return $paymentMethodResponseTransfer->getPaymentMethodOrFail()->setStoreReference($paymentMethodTransfer->getStoreReference());
+        return $paymentMethodResponseTransfer->getPaymentMethodOrFail()->setStore($paymentMethodTransfer->getStoreOrFail());
     }
 
     /**

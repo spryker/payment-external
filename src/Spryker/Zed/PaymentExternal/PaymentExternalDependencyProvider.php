@@ -185,5 +185,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
         $container->set(static::FACADE_STORE_REFERENCE_FACADE, $container->factory(function (Container $container) {
             return new PaymentExternalToStoreReferenceFacadeBridge($container->getLocator()->storeReference()->facade());
         }));
+
+        return $container;
     }
 }

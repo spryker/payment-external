@@ -27,10 +27,13 @@ class PaymentExternalMethodDeletedEventListener extends AbstractPlugin implement
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
+        $storeTransfer = $this->getFactory()->getStoreReferenceFacade()
+            ->getStoreByStoreReference($transfer->getStoreReference());
+
         $paymentMethodTransfer = (new PaymentMethodTransfer())
             ->setLabelName($transfer->getName())
             ->setGroupName($transfer->getProviderName())
-            ->setStoreReference($transfer->getStoreReference());
+            ->setStore($storeTransfer);
 
         $this->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
     }
