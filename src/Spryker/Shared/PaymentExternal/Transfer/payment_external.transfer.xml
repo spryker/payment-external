@@ -148,22 +148,4 @@
     <transfer name="Store">
         <property name="name" type="string"/>
     </transfer>
-
-    <transfer name="PaymentMethodAdded">
-        <property name="name" type="string"/>
-        <property name="providerName" type="string"/>
-        <property name="checkoutOrderTokenUrl" type="string"/>
-        <property name="checkoutRedirectUrl" type="string"/>
-        <property name="messageAttributes" type="MessageAttributes"/>
-    </transfer>
-
-    <transfer name="MessageAttributes"/>
-    <transfer name="PaymentMethodDeleted">
-        <property name="name" type="string"/>
-        <property name="providerName" type="string"/>
-        <property name="checkoutOrderTokenUrl" type="string"/>
-        <property name="checkoutRedirectUrl" type="string"/>
-        <property name="messageAttributes" type="MessageAttributes"/>
-    </transfer>
-
 </transfers>

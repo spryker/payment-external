@@ -190,7 +190,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'storeReference' => $paymentMethodTransfer->getStoreReference(),
+            'store' => $paymentMethodTransfer->getStore(),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())
