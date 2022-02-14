@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+namespace Spryker\Zed\PaymentExternal\Dependency\Facade;
+
+use Generated\Shared\Transfer\StoreTransfer;
+
+class PaymentExternalToStoreReferenceFacadeBridge implements PaymentExternalToStoreReferenceFacadeInterface
+{
+    /**
+     * @var \Spryker\Zed\StoreReference\Business\StoreReferenceFacadeInterface
+     */
+    protected $storeReferenceFacade;
+
+    /**
+     * @param \Spryker\Zed\StoreReference\Business\StoreReferenceFacadeInterface
+     */
+    public function __construct($storeReferenceFacade)
+    {
+        $this->storeReferenceFacade = $storeReferenceFacade;
+    }
+
+    /**
+     * @param string $storeReference
+     * @return \Generated\Shared\Transfer\StoreTransfer
+     */
+    public function getStoreByStoreReference(string $storeReference): StoreTransfer
+    {
+        return $this->storeReferenceFacade->getStoreByStoreReference($storeReference);
+    }
+}
