@@ -32,4 +32,13 @@ class PaymentExternalToStoreReferenceFacadeBridge implements PaymentExternalToSt
     {
         return $this->storeReferenceFacade->getStoreByStoreReference($storeReference);
     }
+
+    /**
+     * @param string $storeName
+     * @return \Generated\Shared\Transfer\StoreTransfer
+     */
+    public function getStoreByStoreName(string $storeName): StoreTransfer
+    {
+        return $this->storeReferenceFacade->getStoreByStoreName($storeName);
+    }
 }

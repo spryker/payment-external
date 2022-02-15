@@ -21,6 +21,7 @@ use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToLocaleFacadeInterface;
 use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeInterface;
 use Spryker\Zed\PaymentExternal\PaymentExternalConfig;
 
 class OrderPostSaveHook implements OrderPostSaveHookInterface
@@ -46,6 +47,11 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     protected $paymentFacade;
 
     /**
+     * @var \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeInterface
+     */
+    protected $storeReferenceFacade;
+
+    /**
      * @var \Spryker\Client\PaymentExternal\PaymentExternalClientInterface
      */
     protected $paymentExternalClient;
@@ -67,13 +73,15 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
         PaymentExternalToLocaleFacadeInterface $localeFacade,
         PaymentExternalToPaymentFacadeInterface $paymentFacade,
         PaymentExternalClientInterface $paymentExternalClient,
-        PaymentExternalConfig $paymentExternalConfig
+        PaymentExternalConfig $paymentExternalConfig,
+        PaymentExternalToStoreReferenceFacadeInterface $storeReferenceFacade
     ) {
         $this->quoteDataMapper = $quoteDataMapper;
         $this->localeFacade = $localeFacade;
         $this->paymentFacade = $paymentFacade;
         $this->paymentExternalClient = $paymentExternalClient;
         $this->paymentExternalConfig = $paymentExternalConfig;
+        $this->storeReferenceFacade = $storeReferenceFacade;
     }
 
     /**
@@ -190,7 +198,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'store' => $paymentMethodTransfer->getStore(),
+            'storeReference' => ($this->storeReferenceFacade->getStoreByStoreName($quoteTransfer->getStoreOrFail()->getName())),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())

@@ -320,7 +320,9 @@ class PaymentExternalFacadeTest extends Unit
     {
         return (new QuoteBuilder())
             ->withItem()
-            ->withStore()
+            ->withStore([
+                'name' => 'DE'
+            ])
             ->withCustomer()
             ->withTotals()
             ->withCurrency()

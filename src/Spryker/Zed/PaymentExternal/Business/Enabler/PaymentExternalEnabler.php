@@ -75,8 +75,8 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
 
         $paymentMethodResponseTransfer = $this->paymentFacade->createPaymentMethod($paymentMethodTransfer);
 
-        return $paymentMethodResponseTransfer->getPaymentMethodOrFail()->setStore($paymentMethodTransfer->getStoreOrFail());
-//        return $paymentMethodResponseTransfer->getPaymentMethodOrFail();
+//        return $paymentMethodResponseTransfer->getPaymentMethodOrFail()->setStore($paymentMethodTransfer->getStoreOrFail());
+        return $paymentMethodResponseTransfer->getPaymentMethodOrFail();
     }
 
     /**
