@@ -218,7 +218,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
     protected function generatePaymentRedirectUrl(string $language, string $urlPath, array $queryParts = []): string
     {
         $url = sprintf(
-            '%s/%s/%s',
+            '%s/%s%s',
             $this->paymentExternalConfig->getBaseUrlYves(),
             $language,
             $urlPath,

@@ -26,6 +26,7 @@ class PaymentExternalToStoreReferenceFacadeBridge implements PaymentExternalToSt
 
     /**
      * @param string $storeReference
+     *
      * @return \Generated\Shared\Transfer\StoreTransfer
      */
     public function getStoreByStoreReference(string $storeReference): StoreTransfer
@@ -35,6 +36,7 @@ class PaymentExternalToStoreReferenceFacadeBridge implements PaymentExternalToSt
 
     /**
      * @param string $storeName
+     *
      * @return \Generated\Shared\Transfer\StoreTransfer
      */
     public function getStoreByStoreName(string $storeName): StoreTransfer
