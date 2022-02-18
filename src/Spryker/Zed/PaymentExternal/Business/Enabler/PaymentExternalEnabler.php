@@ -80,7 +80,8 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
         $existingPaymentMethodTransfer = $this->paymentFacade->findPaymentMethod($paymentMethodTransfer);
         if ($existingPaymentMethodTransfer) {
             $existingPaymentMethodTransfer->fromArray($paymentMethodTransfer->modifiedToArray())
-                ->setIsDeleted(false);
+                ->setIsDeleted(false)
+                ->setIsActive(false);
 
             $paymentMethodResponseTransfer = $this->paymentFacade->updatePaymentMethod($existingPaymentMethodTransfer);
 

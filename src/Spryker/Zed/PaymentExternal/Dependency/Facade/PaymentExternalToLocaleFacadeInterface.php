@@ -7,10 +7,12 @@
 
 namespace Spryker\Zed\PaymentExternal\Dependency\Facade;
 
+use Generated\Shared\Transfer\LocaleTransfer;
+
 interface PaymentExternalToLocaleFacadeInterface
 {
     /**
      * @return \Generated\Shared\Transfer\LocaleTransfer
      */
-    public function getCurrentLocale();
+    public function getCurrentLocale(): LocaleTransfer;
 }

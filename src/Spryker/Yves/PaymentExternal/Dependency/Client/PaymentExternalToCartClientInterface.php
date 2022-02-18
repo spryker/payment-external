@@ -7,15 +7,17 @@
 
 namespace Spryker\Yves\PaymentExternal\Dependency\Client;
 
+use Generated\Shared\Transfer\QuoteTransfer;
+
 interface PaymentExternalToCartClientInterface
 {
     /**
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
-    public function getQuote();
+    public function getQuote(): QuoteTransfer;
 
     /**
      * @return void
      */
-    public function clearQuote();
+    public function clearQuote(): void;
 }
