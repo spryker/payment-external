@@ -54,7 +54,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const FACADE_STORE_REFERENCE_FACADE = 'FACADE_STORE_REFERENCE_FACADE';
+    public const FACADE_STORE_REFERENCE = 'FACADE_STORE_REFERENCE';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -182,7 +182,7 @@ class PaymentExternalDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addStoreReferenceFacade(Container $container): Container
     {
-        $container->set(static::FACADE_STORE_REFERENCE_FACADE, $container->factory(function (Container $container) {
+        $container->set(static::FACADE_STORE_REFERENCE, $container->factory(function (Container $container) {
             return new PaymentExternalToStoreReferenceFacadeBridge($container->getLocator()->storeReference()->facade());
         }));
 

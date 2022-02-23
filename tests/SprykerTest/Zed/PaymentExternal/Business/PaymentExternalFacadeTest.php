@@ -41,6 +41,16 @@ class PaymentExternalFacadeTest extends Unit
     /**
      * @var string
      */
+    protected const STORE_REFERENCE = 'development_test-DE';
+
+    /**
+     * @var string
+     */
+    protected const STORE_NAME = 'DE';
+
+    /**
+     * @var string
+     */
     protected const TOKEN = 'token-value';
 
     /**
@@ -65,7 +75,7 @@ class PaymentExternalFacadeTest extends Unit
     {
         // Arrange
         $storeTransfer = $this->tester->getStoreTransfer([
-            StoreTransfer::STORE_REFERENCE => 'development_test-DE',
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
@@ -98,7 +108,7 @@ class PaymentExternalFacadeTest extends Unit
     {
         // Arrange
         $storeTransfer = $this->tester->getStoreTransfer([
-            StoreTransfer::STORE_REFERENCE => 'development_test-DE',
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
@@ -112,6 +122,7 @@ class PaymentExternalFacadeTest extends Unit
         // Act
         $paymentMethodTransfer = $this->tester->getFacade()
             ->enableExternalPaymentMethod($paymentMethodTransfer);
+        $paymentMethodTransfer->setStore($storeTransfer);
 
         $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
 
@@ -321,7 +332,7 @@ class PaymentExternalFacadeTest extends Unit
         return (new QuoteBuilder())
             ->withItem()
             ->withStore([
-                'name' => 'DE',
+                'name' => static::STORE_NAME,
             ])
             ->withCustomer()
             ->withTotals()

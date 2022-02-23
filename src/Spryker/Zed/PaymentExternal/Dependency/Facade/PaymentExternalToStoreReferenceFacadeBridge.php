@@ -17,7 +17,7 @@ class PaymentExternalToStoreReferenceFacadeBridge implements PaymentExternalToSt
     protected $storeReferenceFacade;
 
     /**
-     * @param \Spryker\Zed\StoreReference\Business\StoreReferenceFacadeInterface
+     * @param \Spryker\Zed\StoreReference\Business\StoreReferenceFacadeInterface $storeReferenceFacade
      */
     public function __construct($storeReferenceFacade)
     {
