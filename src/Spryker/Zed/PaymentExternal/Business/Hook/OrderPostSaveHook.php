@@ -67,6 +67,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
      * @param \Spryker\Client\PaymentExternal\PaymentExternalClientInterface $paymentExternalClient
      * @param \Spryker\Zed\PaymentExternal\PaymentExternalConfig $paymentExternalConfig
+     * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeInterface $storeReferenceFacade
      */
     public function __construct(
         QuoteDataMapperInterface $quoteDataMapper,
@@ -198,7 +199,9 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $language,
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
-            'storeReference' => $this->storeReferenceFacade->getStoreByStoreName($quoteTransfer->getStoreOrFail()->getName())->getStoreReferenceOrFail(),
+            'storeReference' => $this->storeReferenceFacade
+                ->getStoreByStoreName($quoteTransfer->getStoreOrFail()->getName())
+                ->getStoreReferenceOrFail(),
         ];
 
         $paymentExternalTokenRequestTransfer = (new PaymentExternalTokenRequestTransfer())
