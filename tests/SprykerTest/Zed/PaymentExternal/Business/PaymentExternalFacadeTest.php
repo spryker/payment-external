@@ -21,6 +21,7 @@ use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
+use Generated\Shared\Transfer\StoreTransfer;
 use Orm\Zed\Payment\Persistence\Map\SpyPaymentMethodTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
@@ -39,6 +40,16 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
  */
 class PaymentExternalFacadeTest extends Unit
 {
+    /**
+     * @var string
+     */
+    protected const STORE_REFERENCE = 'development_test-DE';
+
+    /**
+     * @var string
+     */
+    protected const STORE_NAME = 'DE';
+
     /**
      * @var string
      */
@@ -65,11 +76,16 @@ class PaymentExternalFacadeTest extends Unit
     public function testEnableExternalPaymentMethodReturnsSavedPaymentMethodTransferWithCorrectData(): void
     {
         // Arrange
+        $storeTransfer = $this->tester->getStoreTransfer([
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
+        ]);
+
         $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
             PaymentMethodAddedTransfer::NAME => 'name-1',
             PaymentMethodAddedTransfer::PROVIDER_NAME => 'provider-name-1',
             PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodAddedTransfer::STORE => $storeTransfer,
         ]);
 
         // Act
@@ -97,16 +113,22 @@ class PaymentExternalFacadeTest extends Unit
     public function testDisableExternalPaymentMethodSetsPaymentMethodIsDeletedFlagToTrueWithCorrectData(): void
     {
         // Arrange
+        $storeTransfer = $this->tester->getStoreTransfer([
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
+        ]);
+
         $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
             PaymentMethodAddedTransfer::NAME => 'name-2',
             PaymentMethodAddedTransfer::PROVIDER_NAME => 'provider-name-2',
             PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodAddedTransfer::STORE => $storeTransfer,
         ]);
 
         // Act
         $paymentMethodTransfer = $this->tester->getFacade()
             ->enableExternalPaymentMethod($paymentMethodAddedTransfer);
+        $paymentMethodTransfer->setStore($storeTransfer);
 
         $paymentMethodDeletedTransfer = $this->tester->mapPaymentMethodTransferToPaymentMethodDeletedTransfer(
             $paymentMethodTransfer,
@@ -114,6 +136,7 @@ class PaymentExternalFacadeTest extends Unit
         );
 
         $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodDeletedTransfer);
+
         $filterPaymentMethodTransfer = (new PaymentMethodTransfer())
             ->setIdPaymentMethod($paymentMethodTransfer->getIdPaymentMethod());
         $updatedPaymentMethodTransfer = $this->tester->findPaymentMethod($filterPaymentMethodTransfer);
@@ -172,11 +195,13 @@ class PaymentExternalFacadeTest extends Unit
     public function testExecuteOrderPostSaveHookReceivesTokenAndUsingItAddsRedirectUrlWithCorrectData(): void
     {
         $paymentProviderTransfer = $this->tester->havePaymentProvider();
+
         $paymentMethodTransfer = $this->tester->havePaymentMethod([
             PaymentMethodTransfer::IS_DELETED => false,
             PaymentMethodTransfer::IS_EXTERNAL => true,
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => static::CHECKOUT_ORDER_TOKEN_URL,
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => static::CHECKOUT_REDIRECT_URL,
+            PaymentMethodTransfer::STORE => '',
             PaymentMethodTransfer::ID_PAYMENT_PROVIDER => $paymentProviderTransfer->getIdPaymentProvider(),
         ]);
 
@@ -317,7 +342,9 @@ class PaymentExternalFacadeTest extends Unit
     {
         return (new QuoteBuilder())
             ->withItem()
-            ->withStore()
+            ->withStore([
+                'name' => static::STORE_NAME,
+            ])
             ->withCustomer()
             ->withTotals()
             ->withCurrency()

@@ -35,10 +35,10 @@ class PaymentExternalToUtilEncodingServiceBridge implements PaymentExternalToUti
         if ($assoc === false) {
             trigger_error(
                 'Param #2 `$assoc` must be `true` as return of type `object` is not accepted.',
-                E_USER_DEPRECATED
+                E_USER_DEPRECATED,
             );
         }
- 
+
         return $this->utilEncodingService->decodeJson($jsonValue, $assoc, $depth, $options);
     }
 }

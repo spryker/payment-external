@@ -91,11 +91,13 @@
         <property name="idPaymentProvider" type="int"/>
         <property name="paymentMethodKey" type="string" strict="true"/>
         <property name="idPaymentMethod" type="int"/>
+        <property name="store" type="Store"/>
     </transfer>
 
     <transfer name="PaymentMethodEvent">
         <property name="name" type="string"/>
         <property name="providerName" type="string"/>
+        <property name="storeReference" type="string"/>
         <property name="checkoutOrderTokenUrl" type="string"/>
         <property name="checkoutRedirectUrl" type="string"/>
     </transfer>
@@ -145,6 +147,7 @@
 
     <transfer name="Store">
         <property name="name" type="string"/>
+        <property name="storeReference" type="string"/>
     </transfer>
 
     <transfer name="PaymentMethodAdded">
@@ -153,11 +156,12 @@
         <property name="checkoutOrderTokenUrl" type="string"/>
         <property name="checkoutRedirectUrl" type="string"/>
         <property name="messageAttributes" type="MessageAttributes"/>
+        <property name="store" type="Store"/>
     </transfer>
 
     <transfer name="MessageAttributes">
-        <property name="store" type="string"/>
-        <property name="tenantIdentifier" type="string"/>
+        <property name="storeReference" type="string"/>
+        <property name="appIdentifier" type="string"/>
     </transfer>
 
     <transfer name="PaymentMethodDeleted">
@@ -166,6 +170,6 @@
         <property name="checkoutOrderTokenUrl" type="string"/>
         <property name="checkoutRedirectUrl" type="string"/>
         <property name="messageAttributes" type="MessageAttributes"/>
+        <property name="store" type="Store"/>
     </transfer>
-
 </transfers>
