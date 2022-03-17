@@ -17,7 +17,7 @@
         "spryker/payment-gui-extension": "^1.0.0",
         "spryker/propel-orm": "^1.0.0",
         "spryker/sales": "^11.28.0",
-        "spryker/store-reference": "*",
+        "spryker/store-reference": "1.0.0",
         "spryker/symfony": "^3.0.0",
         "spryker/transfer": "^3.27.0",
         "spryker/util-encoding": "^1.0.0 || ^2.0.0",
