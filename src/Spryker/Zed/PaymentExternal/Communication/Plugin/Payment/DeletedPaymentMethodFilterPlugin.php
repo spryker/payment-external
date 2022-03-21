@@ -15,6 +15,7 @@ use Spryker\Zed\PaymentExtension\Dependency\Plugin\PaymentMethodFilterPluginInte
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
  * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
+ * @method \Spryker\Zed\PaymentExternal\Communication\PaymentExternalCommunicationFactory getFactory()
  */
 class DeletedPaymentMethodFilterPlugin extends AbstractPlugin implements PaymentMethodFilterPluginInterface
 {

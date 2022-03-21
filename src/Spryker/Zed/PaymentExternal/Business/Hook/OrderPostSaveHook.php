@@ -200,7 +200,7 @@ class OrderPostSaveHook implements OrderPostSaveHookInterface
                 $this->paymentExternalConfig->getCheckoutSummaryPageRoute(),
             ),
             'storeReference' => $this->storeReferenceFacade
-                ->getStoreByStoreName($quoteTransfer->getStoreOrFail()->getName())
+                ->getStoreByStoreName($quoteTransfer->getStoreOrFail()->getNameOrFail())
                 ->getStoreReferenceOrFail(),
         ];
 

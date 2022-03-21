@@ -63,7 +63,7 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
             $paymentMethodTransfer->getLabelNameOrFail(),
-            $paymentMethodTransfer->getStoreOrFail()->getStoreReferenceOrFail(),
+            $paymentMethodTransfer->getStoreOrFail()->getNameOrFail(),
         );
 
         $paymentMethodTransfer->setPaymentMethodKey($paymentMethodKey);
