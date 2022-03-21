@@ -15,7 +15,7 @@ interface PaymentExternalToUtilEncodingServiceInterface
      * @param int|null $depth
      * @param int|null $options
      *
-     * @return array|null
+     * @return object|array|null
      */
-    public function decodeJson(string $jsonValue, bool $assoc = false, ?int $depth = null, ?int $options = null): ?array;
+    public function decodeJson(string $jsonValue, bool $assoc = false, ?int $depth = null, ?int $options = null);
 }

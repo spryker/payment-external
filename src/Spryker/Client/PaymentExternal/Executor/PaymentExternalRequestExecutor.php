@@ -73,7 +73,7 @@ class PaymentExternalRequestExecutor implements PaymentExternalRequestExecutorIn
                 ->setMessage(static::MESSAGE_ERROR_TOKEN_GENERATION);
         }
 
-        $responseData = $this->utilEncodingService->decodeJson($response->getBody()->getContents(), true);
+        $responseData = (array)($this->utilEncodingService->decodeJson($response->getBody()->getContents(), true) ?? []);
 
         return (new PaymentExternalTokenResponseTransfer())->fromArray($responseData, true);
     }
