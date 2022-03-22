@@ -42,16 +42,13 @@ class PaymentExternalDisabler implements PaymentExternalDisablerInterface
      */
     public function disableExternalPaymentMethod(PaymentMethodTransfer $paymentMethodTransfer): void
     {
-        $paymentMethodTransfer->requireLabelName()
-            ->requireGroupName();
-
         $paymentMethodKey = $this->paymentMethodKeyGenerator->generatePaymentMethodKey(
             $paymentMethodTransfer->getGroupNameOrFail(),
             $paymentMethodTransfer->getLabelNameOrFail(),
+            $paymentMethodTransfer->getStoreOrFail()->getNameOrFail(),
         );
 
         $paymentMethodTransfer->setPaymentMethodKey($paymentMethodKey);
-
         $this->entityManager->deletePaymentMethod($paymentMethodTransfer);
     }
 }

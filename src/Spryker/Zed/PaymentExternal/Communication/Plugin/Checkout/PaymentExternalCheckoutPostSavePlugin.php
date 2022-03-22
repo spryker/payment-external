@@ -15,6 +15,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 /**
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
  * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
+ * @method \Spryker\Zed\PaymentExternal\Communication\PaymentExternalCommunicationFactory getFactory()
  */
 class PaymentExternalCheckoutPostSavePlugin extends AbstractPlugin implements CheckoutPostSaveInterface
 {

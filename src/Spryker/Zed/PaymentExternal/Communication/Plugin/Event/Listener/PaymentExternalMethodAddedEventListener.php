@@ -13,6 +13,7 @@ use Spryker\Zed\Event\Dependency\Plugin\EventHandlerInterface;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 
 /**
+ * @method \Spryker\Zed\PaymentExternal\Communication\PaymentExternalCommunicationFactory getFactory()
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
  * @method \Spryker\Zed\PaymentExternal\PaymentExternalConfig getConfig()
  */
@@ -26,11 +27,15 @@ class PaymentExternalMethodAddedEventListener extends AbstractPlugin implements 
      */
     public function handle(TransferInterface $transfer, $eventName): void
     {
+        $storeTransfer = $this->getFactory()->getStoreReferenceFacade()
+            ->getStoreByStoreReference($transfer->getStoreReferenceOrFail());
+
         $paymentMethodTransfer = (new PaymentMethodTransfer())
             ->setLabelName($transfer->getName())
             ->setGroupName($transfer->getProviderName())
             ->setCheckoutOrderTokenUrl($transfer->getCheckoutOrderTokenUrl())
-            ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl());
+            ->setCheckoutRedirectUrl($transfer->getCheckoutRedirectUrl())
+            ->setStore($storeTransfer);
 
         $this->getFacade()->enableExternalPaymentMethod($paymentMethodTransfer);
     }

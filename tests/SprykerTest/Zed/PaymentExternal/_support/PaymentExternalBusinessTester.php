@@ -8,13 +8,18 @@
 namespace SprykerTest\Zed\PaymentExternal;
 
 use Codeception\Actor;
+use Codeception\Util\Stub;
 use Generated\Shared\DataBuilder\OrderFilterBuilder;
 use Generated\Shared\DataBuilder\PaymentMethodBuilder;
 use Generated\Shared\DataBuilder\PaymentProviderBuilder;
+use Generated\Shared\DataBuilder\StoreBuilder;
 use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
+use Generated\Shared\Transfer\StoreTransfer;
 use Orm\Zed\Sales\Persistence\SpySalesOrder;
+use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeBridge;
+use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
 /**
  * Inherited Methods
@@ -48,6 +53,16 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
+     * @param array $seedData
+     *
+     * @return /Generated/Shared/Transfer/StoreTransfer
+     */
+    public function getStoreTransfer(array $seedData = []): StoreTransfer
+    {
+        return (new StoreBuilder($seedData))->build();
+    }
+
+    /**
      * @param array<mixed> $seedData
      *
      * @return \Generated\Shared\Transfer\PaymentProviderTransfer
@@ -77,5 +92,25 @@ class PaymentExternalBusinessTester extends Actor
         $orderEntity->save();
 
         return $orderEntity;
+    }
+
+    /**
+     * @return void
+     */
+    public function mockStoreReferenceFacade(): void
+    {
+        $storeTransfer = (new StoreTransfer())
+            ->setName('DE')
+            ->setStoreReference('dev-DE');
+
+        $storeReferenceFacadeMock = Stub::make(
+            PaymentExternalToStoreReferenceFacadeBridge::class,
+            [
+                'getStoreByStoreReference' => $storeTransfer,
+                'getStoreByStoreName' => $storeTransfer,
+            ],
+        );
+
+        $this->setDependency(PaymentExternalDependencyProvider::FACADE_STORE_REFERENCE, $storeReferenceFacadeMock);
     }
 }

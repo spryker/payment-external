@@ -19,6 +19,7 @@ use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
+use Generated\Shared\Transfer\StoreTransfer;
 use Orm\Zed\Payment\Persistence\Map\SpyPaymentMethodTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Spryker\Client\PaymentExternal\PaymentExternalClientInterface;
@@ -37,6 +38,16 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
  */
 class PaymentExternalFacadeTest extends Unit
 {
+    /**
+     * @var string
+     */
+    protected const STORE_REFERENCE = 'development_test-DE';
+
+    /**
+     * @var string
+     */
+    protected const STORE_NAME = 'DE';
+
     /**
      * @var string
      */
@@ -63,11 +74,16 @@ class PaymentExternalFacadeTest extends Unit
     public function testEnableExternalPaymentMethodReturnsSavedPaymentMethodTransferWithCorrectData(): void
     {
         // Arrange
+        $storeTransfer = $this->tester->getStoreTransfer([
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
+        ]);
+
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
             PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
             PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodTransfer::STORE => $storeTransfer,
         ]);
 
         // Act
@@ -91,18 +107,25 @@ class PaymentExternalFacadeTest extends Unit
     public function testDisableExternalPaymentMethodSetsPaymentMethodIsDeletedFlagToTrueWithCorrectData(): void
     {
         // Arrange
+        $storeTransfer = $this->tester->getStoreTransfer([
+            StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
+        ]);
+
         $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
-            PaymentMethodTransfer::LABEL_NAME => 'label-name-2',
-            PaymentMethodTransfer::GROUP_NAME => 'group-name-2',
+            PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
+            PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodTransfer::STORE => $storeTransfer,
         ]);
 
         // Act
         $paymentMethodTransfer = $this->tester->getFacade()
             ->enableExternalPaymentMethod($paymentMethodTransfer);
+        $paymentMethodTransfer->setStore($storeTransfer);
 
         $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
+
         $filterPaymentMethodTransfer = (new PaymentMethodTransfer())
             ->setIdPaymentMethod($paymentMethodTransfer->getIdPaymentMethod());
         $updatedPaymentMethodTransfer = $this->tester->findPaymentMethod($filterPaymentMethodTransfer);
@@ -160,12 +183,15 @@ class PaymentExternalFacadeTest extends Unit
      */
     public function testExecuteOrderPostSaveHookReceivesTokenAndUsingItAddsRedirectUrlWithCorrectData(): void
     {
+        $this->tester->mockStoreReferenceFacade();
         $paymentProviderTransfer = $this->tester->havePaymentProvider();
+
         $paymentMethodTransfer = $this->tester->havePaymentMethod([
             PaymentMethodTransfer::IS_DELETED => false,
             PaymentMethodTransfer::IS_EXTERNAL => true,
             PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => static::CHECKOUT_ORDER_TOKEN_URL,
             PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => static::CHECKOUT_REDIRECT_URL,
+            PaymentMethodTransfer::STORE => '',
             PaymentMethodTransfer::ID_PAYMENT_PROVIDER => $paymentProviderTransfer->getIdPaymentProvider(),
         ]);
 
@@ -306,7 +332,9 @@ class PaymentExternalFacadeTest extends Unit
     {
         return (new QuoteBuilder())
             ->withItem()
-            ->withStore()
+            ->withStore([
+                'name' => static::STORE_NAME,
+            ])
             ->withCustomer()
             ->withTotals()
             ->withCurrency()
