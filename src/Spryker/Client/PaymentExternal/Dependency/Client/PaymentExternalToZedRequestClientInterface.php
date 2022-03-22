@@ -18,5 +18,5 @@ interface PaymentExternalToZedRequestClientInterface
      *
      * @return \Spryker\Shared\Kernel\Transfer\TransferInterface
      */
-    public function call(string $url, TransferInterface $object, ?array $requestOptions = null): TransferInterface;
+    public function call(string $url, TransferInterface $object, $requestOptions = null): TransferInterface;
 }
