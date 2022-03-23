@@ -166,6 +166,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     {
         return new PaymentMethodEventMapper();
     }
+
     /**
      * @return \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeBridge
      */
