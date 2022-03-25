@@ -29,7 +29,7 @@ class PaymentExternalEnabler implements PaymentExternalEnablerInterface
     /**
      * @var \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface
      */
-    private PaymentMethodEventMapperInterface $paymentMethodEventMapper;
+    protected PaymentMethodEventMapperInterface $paymentMethodEventMapper;
 
     /**
      * @param \Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToPaymentFacadeInterface $paymentFacade
