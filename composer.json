@@ -23,7 +23,7 @@
         "spryker/util-encoding": "^1.0.0 || ^2.0.0",
         "spryker/util-text": "^1.0.0",
         "spryker/zed-request": "^3.0.0",
-        "spryker/message-broker-extension": "*"
+        "spryker/message-broker-extension": "^1.0.0"
     },
     "require-dev": {
         "spryker/code-sniffer": "*",
