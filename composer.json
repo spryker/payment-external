@@ -12,6 +12,7 @@
         "spryker/guzzle": "^2.0.0",
         "spryker/kernel": "^3.30.0",
         "spryker/locale": "^1.0.0 || ^2.0.0 || ^3.0.0",
+        "spryker/message-broker-extension": "^1.0.0",
         "spryker/payment": "^5.5.0",
         "spryker/payment-extension": "^1.0.0",
         "spryker/payment-gui-extension": "^1.0.0",
@@ -22,8 +23,7 @@
         "spryker/transfer": "^3.27.0",
         "spryker/util-encoding": "^1.0.0 || ^2.0.0",
         "spryker/util-text": "^1.0.0",
-        "spryker/zed-request": "^3.0.0",
-        "spryker/message-broker-extension": "^1.0.0"
+        "spryker/zed-request": "^3.0.0"
     },
     "require-dev": {
         "spryker/code-sniffer": "*",
