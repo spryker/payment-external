@@ -80,6 +80,7 @@ class PaymentExternalFacadeTest extends Unit
         $storeTransfer = $this->tester->getStoreTransfer([
             StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
+        $this->tester->setStoreReferenceData([static::STORE_NAME => static::STORE_REFERENCE]);
 
         $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
             PaymentMethodAddedTransfer::NAME => 'name-1',
@@ -88,7 +89,7 @@ class PaymentExternalFacadeTest extends Unit
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
             PaymentMethodAddedTransfer::STORE => $storeTransfer,
         ], [
-            MessageAttributesTransfer::STORE_REFERENCE => 'dev-DE',
+            MessageAttributesTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         // Act
@@ -119,6 +120,7 @@ class PaymentExternalFacadeTest extends Unit
         $storeTransfer = $this->tester->getStoreTransfer([
             StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
+        $this->tester->setStoreReferenceData([static::STORE_NAME => static::STORE_REFERENCE]);
 
         $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
             PaymentMethodAddedTransfer::NAME => 'name-2',
@@ -127,7 +129,7 @@ class PaymentExternalFacadeTest extends Unit
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
             PaymentMethodAddedTransfer::STORE => $storeTransfer,
         ], [
-            MessageAttributesTransfer::STORE_REFERENCE => 'dev-DE',
+            MessageAttributesTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         // Act

@@ -25,3 +25,4 @@ suites:
                 - \SprykerTest\Shared\Payment\Helper\PaymentDataHelper
                 - \SprykerTest\Zed\Sales\Helper\BusinessHelper
                 - \SprykerTest\Shared\PaymentExternal\Helper\PaymentExternalDataHelper
+                - \SprykerTest\Zed\StoreReference\Helper\StoreReferenceHelper
