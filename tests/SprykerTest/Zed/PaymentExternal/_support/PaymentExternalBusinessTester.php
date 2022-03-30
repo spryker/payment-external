@@ -55,9 +55,9 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
-     * @param array $seedData
+     * @param array<mixed> $seedData
      *
-     * @return /Generated/Shared/Transfer/StoreTransfer
+     * @return \Generated\Shared\Transfer\StoreTransfer
      */
     public function getStoreTransfer(array $seedData = []): StoreTransfer
     {
@@ -66,12 +66,15 @@ class PaymentExternalBusinessTester extends Actor
 
     /**
      * @param array<mixed> $seedData
+     * @param array<mixed> $messageAttributesSeedData
      *
      * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
      */
-    public function getPaymentMethodAddedTransfer(array $seedData = []): PaymentMethodAddedTransfer
+    public function getPaymentMethodAddedTransfer(array $seedData = [], array $messageAttributesSeedData = []): PaymentMethodAddedTransfer
     {
-        return (new PaymentMethodAddedBuilder($seedData))->build();
+        return (new PaymentMethodAddedBuilder($seedData))
+            ->withMessageAttributes($messageAttributesSeedData)
+            ->build();
     }
 
     /**

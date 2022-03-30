@@ -11,6 +11,7 @@ use Codeception\Test\Unit;
 use Generated\Shared\DataBuilder\CheckoutResponseBuilder;
 use Generated\Shared\DataBuilder\QuoteBuilder;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenRequestTransfer;
@@ -86,6 +87,8 @@ class PaymentExternalFacadeTest extends Unit
             PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
             PaymentMethodAddedTransfer::STORE => $storeTransfer,
+        ], [
+            MessageAttributesTransfer::STORE_REFERENCE => 'dev-DE',
         ]);
 
         // Act
@@ -123,6 +126,8 @@ class PaymentExternalFacadeTest extends Unit
             PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
             PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
             PaymentMethodAddedTransfer::STORE => $storeTransfer,
+        ], [
+            MessageAttributesTransfer::STORE_REFERENCE => 'dev-DE',
         ]);
 
         // Act
@@ -132,7 +137,8 @@ class PaymentExternalFacadeTest extends Unit
 
         $paymentMethodDeletedTransfer = $this->tester->mapPaymentMethodTransferToPaymentMethodDeletedTransfer(
             $paymentMethodTransfer,
-            new PaymentMethodDeletedTransfer(),
+            (new PaymentMethodDeletedTransfer())
+                ->setMessageAttributes($paymentMethodAddedTransfer->getMessageAttributes()),
         );
 
         $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodDeletedTransfer);
