@@ -51,31 +51,9 @@ class PaymentExternalConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getCheckoutSummaryPageRoute(): string
-    {
-        return '/checkout/summary';
-    }
-
-    /**
-     * @api
-     *
-     * @return string
-     */
     public function getBaseUrlYves(): string
     {
         return $this->get(static::BASE_URL_YVES);
-    }
-
-    /**
-     * @api
-     *
-     * @return string
-     */
-    public function getTenantIdentifier(): string
-    {
-        $beHostInsteadOfTenantIdentifier = getenv('SPRYKER_BE_HOST') !== false ? getenv('SPRYKER_BE_HOST') : 'TENANT_IDENTIFIER_UNDEFINED';
-
-        return getenv('TENANT_IDENTIFIER') !== false ? getenv('TENANT_IDENTIFIER') : $beHostInsteadOfTenantIdentifier;
     }
 
     /**
