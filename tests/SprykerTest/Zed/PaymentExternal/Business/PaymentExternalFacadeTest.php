@@ -11,10 +11,13 @@ use Codeception\Test\Unit;
 use Generated\Shared\DataBuilder\CheckoutResponseBuilder;
 use Generated\Shared\DataBuilder\QuoteBuilder;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\MessageAttributesTransfer;
 use Generated\Shared\Transfer\OrderFilterTransfer;
 use Generated\Shared\Transfer\OrderTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenRequestTransfer;
 use Generated\Shared\Transfer\PaymentExternalTokenResponseTransfer;
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
+use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
 use Generated\Shared\Transfer\PaymentMethodsTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentTransfer;
@@ -77,28 +80,35 @@ class PaymentExternalFacadeTest extends Unit
         $storeTransfer = $this->tester->getStoreTransfer([
             StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
+        $this->tester->setStoreReferenceData([static::STORE_NAME => static::STORE_REFERENCE]);
 
-        $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
-            PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
-            PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
-            PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
-            PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
-            PaymentMethodTransfer::STORE => $storeTransfer,
+        $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
+            PaymentMethodAddedTransfer::NAME => 'name-1',
+            PaymentMethodAddedTransfer::PROVIDER_NAME => 'provider-name-1',
+            PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
+            PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodAddedTransfer::STORE => $storeTransfer,
+        ], [
+            MessageAttributesTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         // Act
         $createdPaymentMethodTransfer = $this->tester->getFacade()
-            ->enableExternalPaymentMethod($paymentMethodTransfer);
+            ->enableExternalPaymentMethod($paymentMethodAddedTransfer);
+
+        $createdPaymentMethodAddedTransfer = $this->tester->mapPaymentMethodTransferToPaymentMethodAddedTransfer(
+            $createdPaymentMethodTransfer,
+            new PaymentMethodAddedTransfer(),
+        );
 
         // Assert
         $this->assertNotNull($createdPaymentMethodTransfer->getIdPaymentMethod());
         $this->assertNotNull($createdPaymentMethodTransfer->getIdPaymentProvider());
         $this->assertFalse($createdPaymentMethodTransfer->getIsDeleted());
-
-        $this->assertSame($paymentMethodTransfer->getLabelName(), $createdPaymentMethodTransfer->getLabelName());
-        $this->assertSame($paymentMethodTransfer->getGroupName(), $createdPaymentMethodTransfer->getGroupName());
-        $this->assertSame($paymentMethodTransfer->getCheckoutOrderTokenUrl(), $createdPaymentMethodTransfer->getCheckoutOrderTokenUrl());
-        $this->assertSame($paymentMethodTransfer->getCheckoutRedirectUrl(), $createdPaymentMethodTransfer->getCheckoutRedirectUrl());
+        $this->assertSame($paymentMethodAddedTransfer->getName(), $createdPaymentMethodAddedTransfer->getName());
+        $this->assertSame($paymentMethodAddedTransfer->getProviderName(), $createdPaymentMethodAddedTransfer->getProviderName());
+        $this->assertSame($paymentMethodAddedTransfer->getCheckoutOrderTokenUrl(), $createdPaymentMethodAddedTransfer->getCheckoutOrderTokenUrl());
+        $this->assertSame($paymentMethodAddedTransfer->getCheckoutRedirectUrl(), $createdPaymentMethodAddedTransfer->getCheckoutRedirectUrl());
     }
 
     /**
@@ -110,21 +120,30 @@ class PaymentExternalFacadeTest extends Unit
         $storeTransfer = $this->tester->getStoreTransfer([
             StoreTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
+        $this->tester->setStoreReferenceData([static::STORE_NAME => static::STORE_REFERENCE]);
 
-        $paymentMethodTransfer = $this->tester->getPaymentMethodTransfer([
-            PaymentMethodTransfer::LABEL_NAME => 'label-name-1',
-            PaymentMethodTransfer::GROUP_NAME => 'group-name-1',
-            PaymentMethodTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
-            PaymentMethodTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
-            PaymentMethodTransfer::STORE => $storeTransfer,
+        $paymentMethodAddedTransfer = $this->tester->getPaymentMethodAddedTransfer([
+            PaymentMethodAddedTransfer::NAME => 'name-2',
+            PaymentMethodAddedTransfer::PROVIDER_NAME => 'provider-name-2',
+            PaymentMethodAddedTransfer::CHECKOUT_ORDER_TOKEN_URL => 'token-url',
+            PaymentMethodAddedTransfer::CHECKOUT_REDIRECT_URL => 'redirect-url',
+            PaymentMethodAddedTransfer::STORE => $storeTransfer,
+        ], [
+            MessageAttributesTransfer::STORE_REFERENCE => static::STORE_REFERENCE,
         ]);
 
         // Act
         $paymentMethodTransfer = $this->tester->getFacade()
-            ->enableExternalPaymentMethod($paymentMethodTransfer);
+            ->enableExternalPaymentMethod($paymentMethodAddedTransfer);
         $paymentMethodTransfer->setStore($storeTransfer);
 
-        $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodTransfer);
+        $paymentMethodDeletedTransfer = $this->tester->mapPaymentMethodTransferToPaymentMethodDeletedTransfer(
+            $paymentMethodTransfer,
+            (new PaymentMethodDeletedTransfer())
+                ->setMessageAttributes($paymentMethodAddedTransfer->getMessageAttributes()),
+        );
+
+        $this->tester->getFacade()->disableExternalPaymentMethod($paymentMethodDeletedTransfer);
 
         $filterPaymentMethodTransfer = (new PaymentMethodTransfer())
             ->setIdPaymentMethod($paymentMethodTransfer->getIdPaymentMethod());
@@ -183,7 +202,6 @@ class PaymentExternalFacadeTest extends Unit
      */
     public function testExecuteOrderPostSaveHookReceivesTokenAndUsingItAddsRedirectUrlWithCorrectData(): void
     {
-        $this->tester->mockStoreReferenceFacade();
         $paymentProviderTransfer = $this->tester->havePaymentProvider();
 
         $paymentMethodTransfer = $this->tester->havePaymentMethod([

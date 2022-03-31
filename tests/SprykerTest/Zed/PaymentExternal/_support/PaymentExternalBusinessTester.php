@@ -8,18 +8,19 @@
 namespace SprykerTest\Zed\PaymentExternal;
 
 use Codeception\Actor;
-use Codeception\Util\Stub;
 use Generated\Shared\DataBuilder\OrderFilterBuilder;
+use Generated\Shared\DataBuilder\PaymentMethodAddedBuilder;
 use Generated\Shared\DataBuilder\PaymentMethodBuilder;
+use Generated\Shared\DataBuilder\PaymentMethodDeletedBuilder;
 use Generated\Shared\DataBuilder\PaymentProviderBuilder;
 use Generated\Shared\DataBuilder\StoreBuilder;
 use Generated\Shared\Transfer\OrderFilterTransfer;
+use Generated\Shared\Transfer\PaymentMethodAddedTransfer;
+use Generated\Shared\Transfer\PaymentMethodDeletedTransfer;
 use Generated\Shared\Transfer\PaymentMethodTransfer;
 use Generated\Shared\Transfer\PaymentProviderTransfer;
 use Generated\Shared\Transfer\StoreTransfer;
 use Orm\Zed\Sales\Persistence\SpySalesOrder;
-use Spryker\Zed\PaymentExternal\Dependency\Facade\PaymentExternalToStoreReferenceFacadeBridge;
-use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
 
 /**
  * Inherited Methods
@@ -35,6 +36,7 @@ use Spryker\Zed\PaymentExternal\PaymentExternalDependencyProvider;
  * @method void comment($description)
  * @method void pause()
  * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalFacadeInterface getFacade()
+ * @method \Spryker\Zed\PaymentExternal\Business\PaymentExternalBusinessFactory getFactory()
  *
  * @SuppressWarnings(PHPMD)
  */
@@ -53,13 +55,36 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
-     * @param array $seedData
+     * @param array<mixed> $seedData
      *
-     * @return /Generated/Shared/Transfer/StoreTransfer
+     * @return \Generated\Shared\Transfer\StoreTransfer
      */
     public function getStoreTransfer(array $seedData = []): StoreTransfer
     {
         return (new StoreBuilder($seedData))->build();
+    }
+
+    /**
+     * @param array<mixed> $seedData
+     * @param array<mixed> $messageAttributesSeedData
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
+     */
+    public function getPaymentMethodAddedTransfer(array $seedData = [], array $messageAttributesSeedData = []): PaymentMethodAddedTransfer
+    {
+        return (new PaymentMethodAddedBuilder($seedData))
+            ->withMessageAttributes($messageAttributesSeedData)
+            ->build();
+    }
+
+    /**
+     * @param array<mixed> $seedData
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodDeletedTransfer
+     */
+    public function getPaymentMethodDeletedTransfer(array $seedData = []): PaymentMethodDeletedTransfer
+    {
+        return (new PaymentMethodDeletedBuilder($seedData))->build();
     }
 
     /**
@@ -95,22 +120,39 @@ class PaymentExternalBusinessTester extends Actor
     }
 
     /**
-     * @return void
+     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodDeletedTransfer
      */
-    public function mockStoreReferenceFacade(): void
-    {
-        $storeTransfer = (new StoreTransfer())
-            ->setName('DE')
-            ->setStoreReference('dev-DE');
+    public function mapPaymentMethodTransferToPaymentMethodDeletedTransfer(
+        PaymentMethodTransfer $paymentMethodTransfer,
+        PaymentMethodDeletedTransfer $paymentMethodDeletedTransfer
+    ): PaymentMethodDeletedTransfer {
+        $paymentMethodDeletedTransfer
+            ->setName($paymentMethodTransfer->getLabelName())
+            ->setProviderName($paymentMethodTransfer->getGroupName())
+            ->setStore($paymentMethodTransfer->getStore());
 
-        $storeReferenceFacadeMock = Stub::make(
-            PaymentExternalToStoreReferenceFacadeBridge::class,
-            [
-                'getStoreByStoreReference' => $storeTransfer,
-                'getStoreByStoreName' => $storeTransfer,
-            ],
-        );
+        return $paymentMethodDeletedTransfer;
+    }
 
-        $this->setDependency(PaymentExternalDependencyProvider::FACADE_STORE_REFERENCE, $storeReferenceFacadeMock);
+    /**
+     * @param \Generated\Shared\Transfer\PaymentMethodTransfer $paymentMethodTransfer
+     * @param \Generated\Shared\Transfer\PaymentMethodAddedTransfer $paymentMethodAddedTransfer
+     *
+     * @return \Generated\Shared\Transfer\PaymentMethodAddedTransfer
+     */
+    public function mapPaymentMethodTransferToPaymentMethodAddedTransfer(
+        PaymentMethodTransfer $paymentMethodTransfer,
+        PaymentMethodAddedTransfer $paymentMethodAddedTransfer
+    ): PaymentMethodAddedTransfer {
+        $paymentMethodAddedTransfer
+            ->setName($paymentMethodTransfer->getLabelName())
+            ->setProviderName($paymentMethodTransfer->getGroupName())
+            ->setCheckoutOrderTokenUrl($paymentMethodTransfer->getCheckoutOrderTokenUrl())
+            ->setCheckoutRedirectUrl($paymentMethodTransfer->getCheckoutRedirectUrl());
+
+        return $paymentMethodAddedTransfer;
     }
 }

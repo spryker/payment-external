@@ -21,6 +21,8 @@ use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGenerator;
 use Spryker\Zed\PaymentExternal\Business\Generator\PaymentMethodKeyGeneratorInterface;
 use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHook;
 use Spryker\Zed\PaymentExternal\Business\Hook\OrderPostSaveHookInterface;
+use Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapper;
+use Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapper;
 use Spryker\Zed\PaymentExternal\Business\Mapper\QuoteDataMapperInterface;
 use Spryker\Zed\PaymentExternal\Business\Reader\OrderReader;
@@ -46,6 +48,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
         return new PaymentExternalEnabler(
             $this->getPaymentFacade(),
             $this->createPaymentMethodKeyGenerator(),
+            $this->createPaymentMethodEventMapper(),
         );
     }
 
@@ -57,6 +60,7 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
         return new PaymentExternalDisabler(
             $this->getEntityManager(),
             $this->createPaymentMethodKeyGenerator(),
+            $this->createPaymentMethodEventMapper(),
         );
     }
 
@@ -153,6 +157,14 @@ class PaymentExternalBusinessFactory extends AbstractBusinessFactory
     public function getUtilTextService(): PaymentExternalToUtilTextServiceInterface
     {
         return $this->getProvidedDependency(PaymentExternalDependencyProvider::SERVICE_UTIL_TEXT);
+    }
+
+    /**
+     * @return \Spryker\Zed\PaymentExternal\Business\Mapper\PaymentMethodEventMapperInterface
+     */
+    public function createPaymentMethodEventMapper(): PaymentMethodEventMapperInterface
+    {
+        return new PaymentMethodEventMapper();
     }
 
     /**

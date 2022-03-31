@@ -149,4 +149,32 @@
         <property name="name" type="string"/>
         <property name="storeReference" type="string"/>
     </transfer>
+
+    <transfer name="PaymentMethodAdded">
+        <property name="name" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+        <property name="store" type="Store"/>
+    </transfer>
+
+    <transfer name="MessageAttributes">
+        <property name="storeReference" type="string"/>
+        <property name="publisher" type="Publisher"/>
+    </transfer>
+
+    <transfer name="Publisher">
+        <property name="storeReference" type="string"/>
+        <property name="appIdentifier" type="string"/>
+    </transfer>
+
+    <transfer name="PaymentMethodDeleted">
+        <property name="name" type="string"/>
+        <property name="providerName" type="string"/>
+        <property name="checkoutOrderTokenUrl" type="string"/>
+        <property name="checkoutRedirectUrl" type="string"/>
+        <property name="messageAttributes" type="MessageAttributes"/>
+        <property name="store" type="Store"/>
+    </transfer>
 </transfers>
